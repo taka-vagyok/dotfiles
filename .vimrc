@@ -32,6 +32,7 @@ NeoBundle 'mbbill/VimExplorer'
 NeoBundle 'Shougo/vimfiler.git'
 NeoBundle 'fuenor/qfixgrep'
 NeoBundle 'kmnk/vim-unite-giti.git'
+NeoBundle 'eiginn/netrw'
 
 " Writting Support
 NeoBundle 'scrooloose/syntastic'
@@ -50,6 +51,9 @@ NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'w0ng/vim-hybrid'
 NeoBundle 'chriskempson/vim-tomorrow-theme'
+
+"Calc
+NeoBundle 'gregsexton/VimCalc'
 
 call neobundle#end()
  
@@ -74,7 +78,10 @@ NeoBundleCheck
 "}}}
 
 "memolist{{{
+	let g:memolist_memo_suffix = ".md.txt"
 	let g:memolist_qfixgrep = 1
+	let g:memolist_prompt_tags = 1
+
 "}}}
 
 "vimfiler{{{
@@ -112,6 +119,7 @@ NeoBundleCheck
 "==================================
 set noswapfile
 set nobackup
+set noundofile
 set tabstop=4
 set shiftwidth=4
 set clipboard+=unnamed  "Enable Windows Clipbord
