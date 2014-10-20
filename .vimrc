@@ -2,7 +2,14 @@
 set background=dark
 colorscheme evening
 "}}}
-
+" temp directory detect{{{
+if $TMP == ''
+ 	let $TMP = '/tmp'
+	if !isdirectory($TMP.'.vim_tmp')
+		call mkdir($TMP.'.vim_tmp')
+	endif
+endif
+"}}}
 "---------------------------------
 " Start Neobundle Settings. {{{
 "---------------------------------
@@ -79,11 +86,11 @@ NeoBundleCheck
 	let g:quickrun_config={'*': {'hook/time/enable': 1},}
 	" temporally file for quickrun
 	" u can use :Tmp <ext> or :Temp <ext> (e.g. :Tmp py => we have tmp.py )
-    command! -nargs=1 -complete=filetype Tmp call EditTmpFile(<f-args>)
+	command! -nargs=1 -complete=filetype Tmp call EditTmpFile(<f-args>)
 	command! -nargs=1 -complete=filetype Temp call EditTmpFile(<f-args>)
 	function! EditTmpFile(ext)
 		if $TMP != ""
-			let l:tmp_dir_qr= $TMP.'/tmp.'.a:ext
+			let l:tmp_dir_qr= $TMP.'/.vim_tmp/tmp.'.a:ext
 		else
 			let l:tmp_dir_qr='~/.vim_tmp/tmp.'.a:ext
 		endif
