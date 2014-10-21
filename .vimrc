@@ -5,9 +5,9 @@ colorscheme evening
 " temp directory detect{{{
 if $TMP == ''
  	let $TMP = '/tmp'
-	if !isdirectory($TMP.'.vim_tmp')
-		call mkdir($TMP.'.vim_tmp')
-	endif
+endif
+if !isdirectory($TMP.'/.vim_tmp')
+	call mkdir($TMP.'/.vim_tmp')
 endif
 "}}}
 "---------------------------------
@@ -89,12 +89,7 @@ NeoBundleCheck
 	command! -nargs=1 -complete=filetype Tmp call EditTmpFile(<f-args>)
 	command! -nargs=1 -complete=filetype Temp call EditTmpFile(<f-args>)
 	function! EditTmpFile(ext)
-		if $TMP != ""
-			let l:tmp_dir_qr= $TMP.'/.vim_tmp/tmp.'.a:ext
-		else
-			let l:tmp_dir_qr='~/.vim_tmp/tmp.'.a:ext
-		endif
-		execute 'edit' l:tmp_dir_qr
+		execute 'edit' $TMP.'/.vim_tmp/tmp.'.a:ext
 	endfunction	
 "}}} 
 
@@ -102,12 +97,11 @@ NeoBundleCheck
 	let g:memolist_memo_suffix = ".md.txt"
 	let g:memolist_qfixgrep = 1
 	let g:memolist_prompt_tags = 1
+	au BufNewFile,BufRead *.{md.txt,md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 "}}}
 
 "vimfiler {{{
-	if has('win32') || has('win64')
-		let g:vimfiler_data_directory = 'G:\tmp\.vimfiler'
-	endif
+	let g:vimfiler_data_directory = $TMP . '/.vimfiler'
 	let g:vimfiler_as_default_explorer = 1
 	let g:vimfiler_safe_mode_by_default = 0
 	 
