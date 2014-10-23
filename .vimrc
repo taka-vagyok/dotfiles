@@ -25,6 +25,7 @@ NeoBundle 'Shougo/vimproc'
 NeoBundle 'edsono/vim-matchit' "Improve Japanese words for w/b
 NeoBundle 'gregsexton/VimCalc'
 NeoBundle 'koron/codic-vim'
+NeoBundle 'itchyny/calendar.vim'
 " }}} 
 
 " Memo {{{
