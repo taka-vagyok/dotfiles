@@ -35,6 +35,7 @@ NeoBundleLazy 'Shougo/vimshell', { 'depends' : "Shougo/vimproc" , 'autoload': {'
 NeoBundle 'edsono/vim-matchit' "Improve Japanese words for w/b
 NeoBundle 'koron/codic-vim'    "Conding Dict
 NeoBundle 'tyru/open-browser.vim'
+NeoBundle 'taka-vagyok/prevent-win-closed.vim'
 NeoBundleLazy 'tyru/restart.vim', {'autoload': {'commands' : ['Restart']}}
 NeoBundleLazy 'gregsexton/VimCalc', {'autoload': {'commands': ['Calc']}}
 NeoBundleLazy 'itchyny/calendar.vim', {'autoload': {'commands': [{'complete': 'customlist,calendar#argument#complete', 'name': 'Calendar'}]}}
@@ -64,6 +65,24 @@ NeoBundle 'Townk/vim-autoclose'
 NeoBundleLazy 'tomtom/tcomment_vim.git', {'autoload': {'commands': [{'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentBlock'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentRight'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TComment'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentMaybeInline'}, {'complete': 'customlist,tcomment#Complete', 'name': 'TCommentAs'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentInline'}]}}
 "}}}2
 
+" [TODO] -I is not worked my mingw64. so I need to add include path to make
+" file and build by my self.
+if has('win32') || has('win64')
+	if executable('mingw32-make')
+		let g:mingw_include = 'C:/bin/mingw64/include/'
+		NeoBundle 'vim-jp/ctags', { 'build' : { 'windows' : 'mingw32-make.exe -I ' . g:mingw_include . ' -f mk_mingw.mak' , } }
+	else
+		NeoBundle 'vim-jp/ctags'
+	endif
+	if !exists("g:load_my_tag_path")
+		let g:load_my_tag_path = 1
+		" Add ctags to my repository
+		let $PATH = $PATH . ";" . $HOME . "/.vim/bundle/ctags"
+	endif
+endif
+if executable('ctags')
+	NeoBundle 'majutsushi/tagbar'
+endif
 " Markdown {{{2
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'plasticboy/vim-markdown' , {'depends' : 'godlygeek/tabular'}
@@ -82,8 +101,6 @@ NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'vim-scripts/AnsiEsc.vim'
 "}}}2
-
-NeoBundle 'taka-vagyok/prevent-win-closed.vim'
 
 
 "NeoBundle Config: End Proc{{{5
@@ -183,15 +200,17 @@ colorscheme Tomorrow-Night
 
 " Easy Todo {{{
 " Replace todo list on/off on Visual mode and Normal mode
+" [TODO] plugin
+let g:toggle_complete_tag = "Done"
 nn <buffer> <Leader><Leader> :call ToggleCheckbox()<CR>
 vn <buffer> <Leader><Leader> :call ToggleCheckbox()<CR>
 function! ToggleCheckbox()
   let l:line = getline('.')
   if l:line =~ '^\-\s\[\s\]'
-    let l:result = substitute(l:line, '^-\s\[\s]', '- [x]', '') . ' [Chkd:' . strftime('%Y/%m/%d %H:%M') . ']'
+    let l:result = substitute(l:line, '^-\s\[\s]', '- [x]', '') . ' [' . g:toggle_complete_tag . ':' . strftime('%Y/%m/%d %H:%M') . ']'
     call setline('.', l:result)
   elseif l:line =~ '^\-\s\[x\]'
-    let l:result = substitute( substitute(l:line, '^-\s\[x\]', '- [ ]', '') , '\s\[Done:\d\{4}.\+]$' , '','')
+    let l:result = substitute( substitute(l:line, '^-\s\[x\]', '- [ ]', '') , '\s\[' . g:toggle_complete_tag . ':\d\{4}.\+]$' , '','')
     call setline('.', l:result)
   end
 endfunction
