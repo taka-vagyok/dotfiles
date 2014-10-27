@@ -32,7 +32,10 @@ NeoBundleLazy 'Shougo/vimshell', { 'depends' : "Shougo/vimproc" , 'autoload': {'
 " }}}2
 
 " Common {{{2
-NeoBundle 'edsono/vim-matchit' "Improve Japanese words for w/b
+NeoBundle 'deton/jasegment.vim'
+if !has('kaoriya')
+	NeoBundle 'deton/jasentence.vim'
+endif
 NeoBundle 'koron/codic-vim'    "Conding Dict
 NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'taka-vagyok/prevent-win-closed.vim'
