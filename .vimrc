@@ -47,7 +47,7 @@ NeoBundleLazy 'mattn/benchvimrc-vim', {'autoload': {'commands': [{'complete': 'f
 
 " Memo {{{2 
 NeoBundle 'thinca/vim-fontzoom'
-NeoBundle 'fuenor/qfixgrep'
+NeoBundleLazy 'fuenor/qfixgrep', {'autoload': {'commands': ['ToggleGrepRecursiveMode', 'REGrepadd', 'OpenQFixWin', 'RFGrep', 'BGrepadd', 'ToggleGrepCurrentDirMode', 'VGrepadd', 'RFGrepadd', 'MyGrepWriteResult', 'MyGrepReadResult', 'Vimgrep', 'BGrep', 'RGrepadd', 'Vimgrepadd', 'FGrep', 'MoveToAltQFixWin', 'ToggleMultiEncodingGrep', 'QFixAltWincmd', 'REGrep', 'QFdo', 'QFixCclose', 'RGrep', 'CloseQFixWin', 'EGrep', 'ToggleDamemoji', 'Grepadd', 'EGrepadd', 'MoveToQFixWin', 'Grep', 'ToggleLocationListMode', 'VGrep', 'ToggleQFixWin', 'FList', 'FGrepadd', 'QFixCopen']}}
 "NeoBundle 'glidenote/memolist.vim'
 NeoBundleLazy 'glidenote/memolist.vim', { 'depends' : "vimfiler" , 'autoload': {'commands': ['MemoList', 'MemoGrep', 'MemoNew']}}
 " }}}2
@@ -69,6 +69,7 @@ NeoBundle 'Townk/vim-autoclose'
 NeoBundleLazy 'tomtom/tcomment_vim.git', {'autoload': {'commands': [{'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentBlock'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentRight'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TComment'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentMaybeInline'}, {'complete': 'customlist,tcomment#Complete', 'name': 'TCommentAs'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentInline'}]}}
 "}}}2
 
+" Tagging {{{
 " [TODO] -I is not worked my mingw64. so I need to add include path to make
 " file and build by my self.
 if has('win32') || has('win64')
@@ -87,6 +88,8 @@ endif
 if executable('ctags')
 	NeoBundle 'majutsushi/tagbar'
 endif
+"}}}
+
 " Markdown {{{2
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'plasticboy/vim-markdown' , {'depends' : 'godlygeek/tabular'}
@@ -106,6 +109,9 @@ NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'vim-scripts/AnsiEsc.vim'
 "}}}2
 
+"
+NeoBundle 'Shougo/vinarise.vim'
+"
 
 "NeoBundle Config: End Proc{{{5
 call neobundle#end()
