@@ -184,6 +184,7 @@ nnoremap <silent> <Leader>o :<C-u>Unite -vertical -no-quit outline<CR>
 
 "let g:prevent_win_closed_enable = 0 
 
+
 "==================================
 " }}}1 End NeoBundle Plugin Settings
 "==================================
@@ -239,5 +240,7 @@ if !has('kaoriya')
 endif
 "}}}
 
+set rtp+=$HOME/.vim/
+runtime!  conf.d/*.vim
 
 "%EOF
