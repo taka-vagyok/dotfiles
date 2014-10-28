@@ -46,6 +46,7 @@ NeoBundleLazy 'mattn/benchvimrc-vim', {'autoload': {'commands': [{'complete': 'f
 " }}}2
 
 " Memo {{{2 
+NeoBundle 'thinca/vim-fontzoom'
 NeoBundle 'fuenor/qfixgrep'
 "NeoBundle 'glidenote/memolist.vim'
 NeoBundleLazy 'glidenote/memolist.vim', { 'depends' : "vimfiler" , 'autoload': {'commands': ['MemoList', 'MemoGrep', 'MemoNew']}}
