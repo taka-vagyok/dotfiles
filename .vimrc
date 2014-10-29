@@ -32,6 +32,7 @@ NeoBundleLazy 'Shougo/vimshell', { 'depends' : "Shougo/vimproc" , 'autoload': {'
 " }}}2
 
 " Common {{{2
+NeoBundle 'thinca/vim-singleton'
 NeoBundle 'deton/jasegment.vim'
 if !has('kaoriya')
 	NeoBundle 'deton/jasentence.vim'
@@ -58,6 +59,7 @@ NeoBundleLazy 'thinca/vim-quickrun', {'autoload': {'commands': [{'complete': 'cu
 
 " File handling {{{2
 NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/neomru.vim'
 NeoBundleLazy 'mbbill/VimExplorer', {'autoload': {'commands': [{'complete': 'file', 'name': 'VEC'}, {'complete': 'file', 'name': 'VE'}]}}
 "NeoBundle 'Shougo/vimfiler.git'
 NeoBundleLazy 'Shougo/vimfiler.git' , {'autoload' : {'commands' : [ "VimFilerTab" , "VimFiler" , "VimFilerExplorer" ]},'explorer' : 1}
@@ -109,7 +111,7 @@ NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'vim-scripts/AnsiEsc.vim'
 "}}}2
 
-"
+" Binary Edit
 NeoBundle 'Shougo/vinarise.vim'
 "
 
@@ -127,6 +129,7 @@ NeoBundleCheck "Can be skip if you want to ask everytime up
 " NeoBundle Plugin Settings {{{1
 "==================================
 
+call singleton#enable()
 "QuickRun {{{2
 " config{{{3
 let s:bundle = neobundle#get("vim-quickrun")
@@ -182,7 +185,9 @@ let g:unite_split_rule = "rightbelow"
 nnoremap <silent> <Leader>o :<C-u>Unite -vertical -no-quit outline<CR>
 "}}} 
 
-"let g:prevent_win_closed_enable = 0 
+" vinarise {{{
+let g:vinarise_enable_auto_detect = 1
+"}}}
 
 
 "==================================
@@ -238,6 +243,18 @@ if !has('kaoriya')
 	set encoding=utf-8
 	set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 endif
+"}}}
+
+" Binary Edit {{{
+augroup BinaryXXD
+  autocmd!
+  autocmd BufReadPre  *.bin let &binary =1
+  autocmd BufReadPost * if &binary | silent %!xxd -g 1
+  autocmd BufReadPost * set ft=xxd | endif
+  autocmd BufWritePre * if &binary | %!xxd -r | endif
+  autocmd BufWritePost * if &binary | silent %!xxd -g 1
+  autocmd BufWritePost * set nomod | endif
+augroup END
 "}}}
 
 set rtp+=$HOME/.vim/
