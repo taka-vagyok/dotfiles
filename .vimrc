@@ -111,10 +111,6 @@ NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'vim-scripts/AnsiEsc.vim'
 "}}}2
 
-" Binary Edit
-NeoBundle 'Shougo/vinarise.vim'
-"
-
 "NeoBundle Config: End Proc{{{5
 call neobundle#end()
 filetype plugin indent on
@@ -129,7 +125,10 @@ NeoBundleCheck "Can be skip if you want to ask everytime up
 " NeoBundle Plugin Settings {{{1
 "==================================
 
+" Vim as Singletone {{{
 call singleton#enable()
+"}}}
+
 "QuickRun {{{2
 " config{{{3
 let s:bundle = neobundle#get("vim-quickrun")
@@ -184,10 +183,6 @@ let g:unite_winwidth = 40
 let g:unite_split_rule = "rightbelow"
 nnoremap <silent> <Leader>o :<C-u>Unite -vertical -no-quit outline<CR>
 "}}} 
-
-" vinarise {{{
-let g:vinarise_enable_auto_detect = 1
-"}}}
 
 
 "==================================
@@ -251,7 +246,8 @@ augroup BinaryXXD
   autocmd BufReadPre  *.bin let &binary =1
   autocmd BufReadPost * if &binary | silent %!xxd -g 1
   autocmd BufReadPost * set ft=xxd | endif
-  autocmd BufWritePre * if &binary | %!xxd -r | endif
+  autocmd BufWritePre * if &binary | execute "%!xxd -r" | endif
+  "autocmd BufWritePre * if &binary | %!xxd -r | endif
   autocmd BufWritePost * if &binary | silent %!xxd -g 1
   autocmd BufWritePost * set nomod | endif
 augroup END
