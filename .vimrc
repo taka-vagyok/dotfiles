@@ -40,6 +40,10 @@ endif
 NeoBundle 'koron/codic-vim'    "Conding Dict
 NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'taka-vagyok/prevent-win-closed.vim'
+if has("win32") || has("win64")
+	NeoBundle('mattn/startmenu-vim')
+endif
+
 NeoBundleLazy 'tyru/restart.vim', {'autoload': {'commands' : ['Restart']}}
 NeoBundleLazy 'gregsexton/VimCalc', {'autoload': {'commands': ['Calc']}}
 NeoBundleLazy 'itchyny/calendar.vim', {'autoload': {'commands': [{'complete': 'customlist,calendar#argument#complete', 'name': 'Calendar'}]}}
@@ -60,6 +64,7 @@ NeoBundleLazy 'thinca/vim-quickrun', {'autoload': {'commands': [{'complete': 'cu
 " File handling {{{2
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neomru.vim'
+NeoBundle 'kien/ctrlp.vim'
 NeoBundleLazy 'mbbill/VimExplorer', {'autoload': {'commands': [{'complete': 'file', 'name': 'VEC'}, {'complete': 'file', 'name': 'VE'}]}}
 "NeoBundle 'Shougo/vimfiler.git'
 NeoBundleLazy 'Shougo/vimfiler.git' , {'autoload' : {'commands' : [ "VimFilerTab" , "VimFiler" , "VimFilerExplorer" ]},'explorer' : 1}
@@ -184,7 +189,11 @@ let g:unite_split_rule = "rightbelow"
 nnoremap <silent> <Leader>o :<C-u>Unite -vertical -no-quit outline<CR>
 "}}} 
 
-
+" CTRLP {{{
+if has("win32") || has("win64")
+	let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
+endif
+"}}}
 "==================================
 " }}}1 End NeoBundle Plugin Settings
 "==================================
