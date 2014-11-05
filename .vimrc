@@ -38,12 +38,11 @@ if !has('kaoriya')
 	NeoBundle 'deton/jasentence.vim'
 endif
 NeoBundle 'koron/codic-vim'    "Conding Dict
-NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'taka-vagyok/prevent-win-closed.vim'
+NeoBundle 'tyru/open-browser.vim'
 if has("win32") || has("win64")
-	NeoBundle('mattn/startmenu-vim')
+	NeoBundleLazy 'mattn/startmenu-vim', {'autoload': {'unite_sources': ['startmenu'], 'commands': ['StartMenu']}}
 endif
-
 NeoBundleLazy 'tyru/restart.vim', {'autoload': {'commands' : ['Restart']}}
 NeoBundleLazy 'gregsexton/VimCalc', {'autoload': {'commands': ['Calc']}}
 NeoBundleLazy 'itchyny/calendar.vim', {'autoload': {'commands': [{'complete': 'customlist,calendar#argument#complete', 'name': 'Calendar'}]}}
@@ -64,9 +63,8 @@ NeoBundleLazy 'thinca/vim-quickrun', {'autoload': {'commands': [{'complete': 'cu
 " File handling {{{2
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'kien/ctrlp.vim'
+NeoBundleLazy 'kien/ctrlp.vim', {'autoload': {'commands': ['CtrlPMixed', 'CtrlPClearAllCaches', 'CtrlPCurWD', 'CtrlP', 'CtrlPRTS', 'CtrlPBuffer', 'CtrlPMRUFiles', 'CtrlPBookmarkDirAdd', 'CtrlPDir', 'CtrlPRoot', 'CtrlPChange', 'ClearCtrlPCache', 'CtrlPLine', 'ClearAllCtrlPCaches', 'CtrlPBufTagAll', 'CtrlPClearCache', 'CtrlPQuickfix', 'CtrlPBufTag', 'CtrlPTag', 'CtrlPCurFile', 'CtrlPLastMode', 'CtrlPUndo', 'CtrlPChangeAll', 'CtrlPBookmarkDir']}}
 NeoBundleLazy 'mbbill/VimExplorer', {'autoload': {'commands': [{'complete': 'file', 'name': 'VEC'}, {'complete': 'file', 'name': 'VE'}]}}
-"NeoBundle 'Shougo/vimfiler.git'
 NeoBundleLazy 'Shougo/vimfiler.git' , {'autoload' : {'commands' : [ "VimFilerTab" , "VimFiler" , "VimFilerExplorer" ]},'explorer' : 1}
  "}}}
 
@@ -93,7 +91,7 @@ if has('win32') || has('win64')
 	endif
 endif
 if executable('ctags')
-	NeoBundle 'majutsushi/tagbar'
+	NeoBundleLazy 'majutsushi/tagbar', {'augroup': 'TagbarAutoCmds', 'autoload': {'commands': ['TagbarGetTypeConfig', 'TagbarSetFoldlevel', 'TagbarOpen', 'TagbarDebug', 'Tagbar', 'TagbarClose', 'TagbarTogglePause', 'TagbarOpenAutoClose', 'TagbarDebugEnd', 'TagbarCurrentTag', 'TagbarShowTag', 'TagbarToggle']}}
 endif
 "}}}
 
@@ -108,13 +106,37 @@ NeoBundleLazy 'kannokanno/previm', {'depends': 'tyru/open-browser.vim' , 'autolo
 NeoBundle 'pangloss/vim-javascript'
 "}}}2
 
+" C# {{{
+NeoBundle 'OrangeT/vim-csharp' "syntax
+" MSBuild is in C:\\Windows
+" ex) C:\Windows\Microsoft.NET\Framework64\v4.0.30319
+" set path to such a path
+if executable('python') && executable('msbuild')
+NeoBundleLazy 'nosami/Omnisharp', {
+\   'autoload': {'filetypes': ['cs'], 'commands' : ['OmniSharpStartServer', 'OmniSharpStartServerSolution']},
+\   'build': {
+\     'windows': 'MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
+\     'mac': 'xbuild server/OmniSharp.sln',
+\     'unix': 'xbuild server/OmniSharp.sln',
+\   }
+\ }
+endif
+" }}}
+
 "Visualize {{{2
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'w0ng/vim-hybrid'
 NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'vim-scripts/AnsiEsc.vim'
+NeoBundle 'kien/rainbow_parentheses.vim'
 "}}}2
+
+" Redmine {{{
+NeoBundle 'mattn/webapi-vim'
+"NeoBundle 'basyura/unite-yarm'
+NeoBundle 'basyura/rmine.vim'
+"}}}
 
 "NeoBundle Config: End Proc{{{5
 call neobundle#end()
@@ -261,6 +283,34 @@ augroup BinaryXXD
   autocmd BufWritePost * set nomod | endif
 augroup END
 "}}}
+
+" ColorSyntax {{{2
+
+" autogroup csomni
+
+augroup omnisharp_commands
+    autocmd!
+    "Set autocomplete function to OmniSharp (if not using YouCompleteMe completion plugin)
+    autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+    " Synchronous build (blocks Vim)
+    "autocmd FileType cs nnoremap <F5> :wa!<cr>:OmniSharpBuild<cr>
+    " Builds can also run asynchronously with vim-dispatch installed
+    autocmd FileType cs nnoremap <leader>b :wa!<cr>:OmniSharpBuildAsync<cr>
+    " automatic syntax check on events (TextChanged requires Vim 7.4)
+    autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+    " Automatically add new cs files to the nearest project on save
+    autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+    "show type information automatically when the cursor stops moving
+    autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+augroup END
+
+
+" () をハイライト
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+"2}}}
 
 set rtp+=$HOME/.vim/
 runtime!  conf.d/*.vim
