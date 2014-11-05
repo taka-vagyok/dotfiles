@@ -153,7 +153,9 @@ NeoBundleCheck "Can be skip if you want to ask everytime up
 "==================================
 
 " Vim as Singletone {{{
-call singleton#enable()
+if has("gui_running")
+	call singleton#enable()
+endif
 "}}}
 
 "QuickRun {{{2
