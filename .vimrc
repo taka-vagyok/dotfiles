@@ -134,7 +134,7 @@ NeoBundle 'kien/rainbow_parentheses.vim'
 
 " Redmine {{{
 NeoBundle 'mattn/webapi-vim'
-"NeoBundle 'basyura/unite-yarm'
+"ref[rmine:http://blog.basyura.org/entry/20130106/p1]
 NeoBundle 'basyura/rmine.vim'
 "}}}
 
