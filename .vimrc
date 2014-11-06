@@ -291,9 +291,6 @@ augroup END
 "}}}
 
 " ColorSyntax {{{2
-
-" autogroup csomni
-
 augroup omnisharp_commands
     autocmd!
     "Set autocomplete function to OmniSharp (if not using YouCompleteMe completion plugin)
@@ -312,10 +309,12 @@ augroup END
 
 
 " () をハイライト
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
+augroup rainbowparentheses
+	au VimEnter * RainbowParenthesesToggle
+	au Syntax * RainbowParenthesesLoadRound
+	au Syntax * RainbowParenthesesLoadSquare
+	au Syntax * RainbowParenthesesLoadBraces
+augroup END
 "2}}}
 
 set rtp+=$HOME/.vim/
