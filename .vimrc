@@ -69,8 +69,12 @@ NeoBundleLazy 'Shougo/vimfiler.git' , {'autoload' : {'commands' : [ "VimFilerTab
  "}}}
 
 " Writting Support {{{2
+NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Townk/vim-autoclose'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'vim-trailing-whitespace'
+NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundleLazy 'tomtom/tcomment_vim.git', {'autoload': {'commands': [{'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentBlock'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentRight'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TComment'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentMaybeInline'}, {'complete': 'customlist,tcomment#Complete', 'name': 'TCommentAs'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentInline'}]}}
 "}}}2
 
