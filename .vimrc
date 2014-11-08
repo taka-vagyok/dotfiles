@@ -57,7 +57,7 @@ NeoBundleLazy 'glidenote/memolist.vim', { 'depends' : "vimfiler" , 'autoload': {
 " }}}2
 
 " Script Quick Test {{{2
-NeoBundleLazy 'thinca/vim-quickrun', {'autoload': {'commands': [{'complete': 'customlist,quickrun#complete', 'name': 'QuickRun'}]}}
+NeoBundleLazy 'thinca/vim-quickrun', {'autoload': {'mappings': [['sxn', '<Plug>(quickrun']], 'commands': [{'complete': 'customlist,quickrun#complete', 'name': 'QuickRun'}]}}
 " }}}2
 
 " File handling {{{2
@@ -72,8 +72,10 @@ NeoBundleLazy 'Shougo/vimfiler.git' , {'autoload' : {'commands' : [ "VimFilerTab
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Townk/vim-autoclose'
+"NeoBUndle 'jiangmiao/auto-pairs'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'vim-trailing-whitespace'
+NeoBundle  'junegunn/vim-easy-align', { 'autoload': {'commands' : ['EasyAlign'] }}
 NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundleLazy 'tomtom/tcomment_vim.git', {'autoload': {'commands': [{'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentBlock'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentRight'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TComment'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentMaybeInline'}, {'complete': 'customlist,tcomment#Complete', 'name': 'TCommentAs'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentInline'}]}}
 "}}}2
@@ -142,6 +144,15 @@ NeoBundle 'mattn/webapi-vim'
 NeoBundle 'basyura/rmine.vim'
 "}}}
 
+" cmigeo {{{2
+"NeoBundle 'haya14busa/cmigemo' 
+"NeoBundleLazy 'koron/cmigemo', {
+"\   'build': {
+"\	  'windows': 'mingw32-make -f compile/Make_mingw.mak',
+"\   }
+"\ }
+" }}}2 
+
 "NeoBundle Config: End Proc{{{5
 call neobundle#end()
 filetype plugin indent on
@@ -155,12 +166,6 @@ NeoBundleCheck "Can be skip if you want to ask everytime up
 "==================================
 " NeoBundle Plugin Settings {{{1
 "==================================
-
-" Vim as Singletone {{{
-if has("gui_running")
-	call singleton#enable()
-endif
-"}}}
 
 "QuickRun {{{2
 " config{{{3
@@ -179,7 +184,7 @@ endfunction
 "}}} 
 
 "memolist {{{2
-let g:memolist_memo_suffix = ".md.txt"
+let g:memolist_memo_suffix = "md.txt"
 let g:memolist_prompt_tags = 1
 let g:memolist_qfixgrep = 1
 let g:memolist_vimfiler = 1
@@ -284,7 +289,6 @@ augroup BinaryXXD
   autocmd BufReadPost * if &binary | silent %!xxd -g 1
   autocmd BufReadPost * set ft=xxd | endif
   autocmd BufWritePre * if &binary | execute "%!xxd -r" | endif
-  "autocmd BufWritePre * if &binary | %!xxd -r | endif
   autocmd BufWritePost * if &binary | silent %!xxd -g 1
   autocmd BufWritePost * set nomod | endif
 augroup END
