@@ -74,7 +74,7 @@ NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Townk/vim-autoclose'
 "NeoBUndle 'jiangmiao/auto-pairs'
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'vim-trailing-whitespace'
+NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle  'junegunn/vim-easy-align', { 'autoload': {'commands' : ['EasyAlign'] }}
 NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundleLazy 'tomtom/tcomment_vim.git', {'autoload': {'commands': [{'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentBlock'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentRight'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TComment'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentMaybeInline'}, {'complete': 'customlist,tcomment#Complete', 'name': 'TCommentAs'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentInline'}]}}
