@@ -49,7 +49,7 @@ NeoBundleLazy 'itchyny/calendar.vim', {'autoload': {'commands': [{'complete': 'c
 NeoBundleLazy 'mattn/benchvimrc-vim', {'autoload': {'commands': [{'complete': 'file', 'name': 'BenchVimrc'}]}}
 " }}}2
 
-" Memo {{{2 
+" Memo {{{2
 NeoBundle 'thinca/vim-fontzoom'
 NeoBundleLazy 'fuenor/qfixgrep', {'autoload': {'commands': ['ToggleGrepRecursiveMode', 'REGrepadd', 'OpenQFixWin', 'RFGrep', 'BGrepadd', 'ToggleGrepCurrentDirMode', 'VGrepadd', 'RFGrepadd', 'MyGrepWriteResult', 'MyGrepReadResult', 'Vimgrep', 'BGrep', 'RGrepadd', 'Vimgrepadd', 'FGrep', 'MoveToAltQFixWin', 'ToggleMultiEncodingGrep', 'QFixAltWincmd', 'REGrep', 'QFdo', 'QFixCclose', 'RGrep', 'CloseQFixWin', 'EGrep', 'ToggleDamemoji', 'Grepadd', 'EGrepadd', 'MoveToQFixWin', 'Grep', 'ToggleLocationListMode', 'VGrep', 'ToggleQFixWin', 'FList', 'FGrepadd', 'QFixCopen']}}
 "NeoBundle 'glidenote/memolist.vim'
@@ -145,13 +145,13 @@ NeoBundle 'basyura/rmine.vim'
 "}}}
 
 " cmigeo {{{2
-"NeoBundle 'haya14busa/cmigemo' 
+"NeoBundle 'haya14busa/cmigemo'
 "NeoBundleLazy 'koron/cmigemo', {
 "\   'build': {
 "\	  'windows': 'mingw32-make -f compile/Make_mingw.mak',
 "\   }
 "\ }
-" }}}2 
+" }}}2
 
 "NeoBundle Config: End Proc{{{5
 call neobundle#end()
@@ -160,7 +160,7 @@ NeoBundleCheck "Can be skip if you want to ask everytime up
 " }}}5
 
 "------------------------------
-" }}}1 NeoBundle Plugins 
+" }}}1 NeoBundle Plugins
 "------------------------------
 
 "==================================
@@ -210,7 +210,7 @@ function! s:bundle.hooks.on_source(bundle)
 	endfunction
 endfunction
 unlet s:bundle
-"}}}
+ s"}}}
 
 "indent-guide {{{2
 let g:indent_guides_enable_on_vim_startup = 1
@@ -220,13 +220,13 @@ let g:indent_guides_enable_on_vim_startup = 1
 let g:unite_winwidth = 40
 let g:unite_split_rule = "rightbelow"
 nnoremap <silent> <Leader>o :<C-u>Unite -vertical -no-quit outline<CR>
-"}}} 
+"}}}
 
 " CTRLP {{{
 if has("win32") || has("win64")
 	let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
 endif
-"}}}
+"}s}}
 "==================================
 " }}}1 End NeoBundle Plugin Settings
 "==================================
@@ -251,7 +251,7 @@ set incsearch
 set showcmd
 colorscheme Tomorrow-Night
 
-" Easy Todo {{{
+ " Easy Todo {{{
 " Replace todo list on/off on Visual mode and Normal mode
 " [TODO] plugin
 let g:toggle_complete_tag = "Done"
@@ -273,14 +273,14 @@ endfunction
 inoremap <silent> <ESC> <ESC>
 inoremap <silent> <C-[> <ESC>
 inoremap <silent> <C-j> <C-^>
-"}}}
+" }}}
 
 "Encoding Check{{{
 if !has('kaoriya')
 	set encoding=utf-8
 	set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 endif
-"}}}
+"} }}
 
 " Binary Edit {{{
 augroup BinaryXXD
