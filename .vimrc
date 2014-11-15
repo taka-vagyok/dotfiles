@@ -152,6 +152,10 @@ NeoBundle 'basyura/rmine.vim'
 "\ }
 " }}}2
 
+"{{{5
+NeoBundle "yuratomo/w3m.vim"
+"}}}5
+
 "NeoBundle Config: End Proc{{{5
 call neobundle#end()
 filetype plugin indent on
@@ -274,7 +278,7 @@ inoremap <silent> <C-[> <ESC>
 inoremap <silent> <C-j> <C-^>
 " }}}
 
-"Enco ding Check{{{
+"Add Encording if not kaoriya vim{{{
 if !has('kaoriya')
 	set encoding=utf-8
 	set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
