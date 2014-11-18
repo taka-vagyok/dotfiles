@@ -72,6 +72,7 @@ NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Townk/vim-autoclose'
 "NeoBUndle 'jiangmiao/auto-pairs'
+NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle  'junegunn/vim-easy-align', { 'autoload': {'commands' : ['EasyAlign'] }}
@@ -239,7 +240,21 @@ if has("win32") || has("win64")
 	let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
 endif
 "}}}2
+
+" neocomplete
+"if neobundle#is_installed('neocomplete')
+    let g:neocomplete#enable_at_startup = 1
+    let g:neocomplete#enable_ignore_case = 1
+    let g:neocomplete#enable_smart_case = 1
+    if !exists('g:neocomplete#keyword_patterns')
+        let g:neocomplete#keyword_patterns = {}
+    endif
+    let g:neocomplete#keyword_patterns._ = '\h\w*'
+"endif
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 "
+
 
 " W3M {{{2
 let g:w3m#command = 'C:\bin\w3m-0.5.3-mingw32\w3m.exe'
