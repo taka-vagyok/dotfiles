@@ -56,7 +56,7 @@ NeoBundleLazy 'glidenote/memolist.vim', { 'depends' : "vimfiler" , 'autoload': {
 "}}}2
 
 " Script Quick Test {{{2
-NeoBundleLazy 'thinca/vim-quickrun', {'autoload': {'mappings': [['sxn', '<Plug>(quickrun']], 'commands': [{'complete': 'customlist,quickrun#complete', 'name': 'QuickRun'}]}}
+NeoBundle 'thinca/vim-quickrun'
 "}}}2
 
 " File handling {{{2
@@ -143,7 +143,7 @@ NeoBundle 'mattn/webapi-vim'
 NeoBundle 'basyura/rmine.vim'
 " }}}2
 
-" cmigeo {{{2
+" cmigeo(comment out) {{{2
 "NeoBundle 'haya14busa/cmigemo'
 "NeoBundleLazy 'koron/cmigemo', {
 "\   'build': {
@@ -151,6 +151,15 @@ NeoBundle 'basyura/rmine.vim'
 "\   }
 "\ }
 " }}}2
+
+" Presentation {{2
+NeoBundle "sotte/presenting.vim"
+"}}}2
+
+" Ref Doc {{{2
+NeoBundleLazy 'thinca/vim-ref', {'autoload': {'unite_sources': ['ref'], 'mappings': [['sxn', '<Plug>(ref-keyword)']], 'commands': [{'complete': 'customlist,ref#complete', 'name': 'Ref'}, 'RefHistory']}}
+" }}}2
+
 
 "{{{5
 NeoBundle "yuratomo/w3m.vim"
@@ -229,6 +238,11 @@ nnoremap <silent> <Leader>o :<C-u>Unite -vertical -no-quit outline<CR>
 if has("win32") || has("win64")
 	let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
 endif
+"}}}2
+"
+
+" W3M {{{2
+let g:w3m#command = 'C:\bin\w3m-0.5.3-mingw32\w3m.exe'
 "}}}2
 "==== ==============================
 " }}}1 End NeoBundle Plugin Settings
