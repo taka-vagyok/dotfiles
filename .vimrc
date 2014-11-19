@@ -241,19 +241,28 @@ if has("win32") || has("win64")
 endif
 "}}}2
 
-" neocomplete
-"if neobundle#is_installed('neocomplete')
-    let g:neocomplete#enable_at_startup = 1
-    let g:neocomplete#enable_ignore_case = 1
-    let g:neocomplete#enable_smart_case = 1
-    if !exists('g:neocomplete#keyword_patterns')
-        let g:neocomplete#keyword_patterns = {}
-    endif
-    let g:neocomplete#keyword_patterns._ = '\h\w*'
-"endif
+" neocomplete{{{2
+let g:neocomplete#acp_enableAtStartUp = 0
+let g:neocomplete#enable_at_startup = 0
+let g:neocomplete#enable_ignore_case = 1
+let g:neocomplete#enable_smart_case = 1
+if !exists('g:neocomplete#keyword_patterns')
+	let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns._ = '\h\w*'
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-"
+" Set minimum syntax keyword length.
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+
+" Define dictionary.
+let g:neocomplcache_dictionary_filetype_lists = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vim/.vimshell/command_history',
+    \ }
+
+"}}}2
 
 
 " W3M {{{2
@@ -281,6 +290,8 @@ set foldmethod=marker
 set ruler
 set incsearch
 set showcmd
+set modeline
+set modelines=5
 colorscheme Tomorrow-Night
 
  " Easy Todo {{{
