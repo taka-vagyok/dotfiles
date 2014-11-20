@@ -243,31 +243,33 @@ endif
 
 " neocomplete{{{2
 let g:neocomplete#acp_enableAtStartUp = 0
-let g:neocomplete#enable_at_startup = 0
+let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_ignore_case = 1
 let g:neocomplete#enable_smart_case = 1
-if !exists('g:neocomplete#keyword_patterns')
-	let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns._ = '\h\w*'
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-" Set minimum syntax keyword length.
-let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_min_syntax_length = 4
 let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
     \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vim/.vimshell/command_history',
+    \ 'vimshell' : $HOME . '/.cache/.vimshell/command_history'
     \ }
-
+"Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+	let g:neocomplete#sources#omni#input_patterns = {}
+endif
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 "}}}2
-
 
 " W3M {{{2
-let g:w3m#command = 'C:\bin\w3m-0.5.3-mingw32\w3m.exe'
+"let g:w3m#command = ''
 "}}}2
+
 "==== ==============================
 " }}}1 End NeoBundle Plugin Settings
 "==================================
