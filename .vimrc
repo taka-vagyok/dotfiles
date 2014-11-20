@@ -1,3 +1,5 @@
+" Add runtime path
+set rtp+=$HOME/.vim/
 " temp colorscheme for indent plugin {{{
 set background=dark
 colorscheme evening
@@ -10,14 +12,22 @@ if !isdirectory($TMP.'/.vim_tmp')
 	call mkdir($TMP.'/.vim_tmp')
 endif
 "}}}
+
+"==========================================
+" All NeoBundle Configulation{{{1
+"==========================================
+" [Todo] Need to change function like has_neobundle_config()
+if executable('git') && executable('curl')
+
 "---------------------------------
- " NeoBundle Plugins {{{1
+ " Install NeoBundle Plugins {{{2
 "---------------------------------
 " NeoBundle Config: Start Proc {{{5
 set runtimepath+=~/.vim/bundle/neobundle.vim/
 call neobundle#begin(expand('~/.vim/bundle/'))
+runtime! conf.neobundle.d/*.vim "for each enviroments bundles
 "}}}5
-"  Manage NeoBundle {{{2
+"  Manage NeoBundle {{{3
 NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundleLazy 'LeafCage/nebula.vim', {'autoload': {'commands': ['NebulaPutLazy', 'NebulaPutFromClipboard', 'NebulaYankOptions', 'NebulaYankConfig', 'NebulaPutConfig', 'NebulaYankTap']}}
 NeoBundle 'Shougo/vimproc', {'build' : {
@@ -29,10 +39,10 @@ NeoBundle 'Shougo/vimproc', {'build' : {
 \	}
 \}
 NeoBundleLazy 'Shougo/vimshell', { 'depends' : "Shougo/vimproc" , 'autoload': {'unite_sources': ['vimshell_external_history', 'vimshell_history', 'vimshell_zsh_complete'], 'mappings': [['n', '<Plug>(vimshell_']], 'commands': [{'complete': 'customlist,vimshell#complete', 'name': 'VimShell'}, {'complete': 'customlist,vimshell#complete', 'name': 'VimShellPop'}, {'complete': 'customlist,vimshell#complete', 'name': 'VimShellCreate'}, {'complete': 'customlist,vimshell#complete', 'name': 'VimShellCurrentDir'}, {'complete': 'customlist,vimshell#helpers#vimshell_execute_complete', 'name': 'VimShellExecute'}, {'complete': 'customlist,vimshell#complete', 'name': 'VimShellBufferDir'}, 'VimShellSendString', {'complete': 'customlist,vimshell#complete', 'name': 'VimShellTab'}, {'complete': 'customlist,vimshell#helpers#vimshell_execute_complete', 'name': 'VimShellTerminal'}, {'complete': 'customlist,vimshell#helpers#vimshell_execute_complete', 'name': 'VimShellInteractive'}, {'complete': 'buffer', 'name': 'VimShellSendBuffer'}]}}
-"}}}2
+"}}}3
 
-" Common {{{2 
-NeoBundle 'thinca/vim-singleton'
+" Common {{{3
+NeoBundle 'thinca/vim-singleton' "Prevent multi window
 NeoBundle 'deton/jasegment.vim'
 if !has('kaoriya')
 	NeoBundle 'deton/jasentence.vim'
@@ -47,27 +57,27 @@ NeoBundleLazy 'tyru/restart.vim', {'autoload': {'commands' : ['Restart']}}
 NeoBundleLazy 'gregsexton/VimCalc', {'autoload': {'commands': ['Calc']}}
 NeoBundleLazy 'itchyny/calendar.vim', {'autoload': {'commands': [{'complete': 'customlist,calendar#argument#complete', 'name': 'Calendar'}]}}
 NeoBundleLazy 'mattn/benchvimrc-vim', {'autoload': {'commands': [{'complete': 'file', 'name': 'BenchVimrc'}]}}
-"}}}2
+"}}}3
 
-" Memo {{{2
+" Memo {{{3
 NeoBundle 'thinca/vim-fontzoom'
 NeoBundleLazy 'fuenor/qfixgrep', {'autoload': {'commands': ['ToggleGrepRecursiveMode', 'REGrepadd', 'OpenQFixWin', 'RFGrep', 'BGrepadd', 'ToggleGrepCurrentDirMode', 'VGrepadd', 'RFGrepadd', 'MyGrepWriteResult', 'MyGrepReadResult', 'Vimgrep', 'BGrep', 'RGrepadd', 'Vimgrepadd', 'FGrep', 'MoveToAltQFixWin', 'ToggleMultiEncodingGrep', 'QFixAltWincmd', 'REGrep', 'QFdo', 'QFixCclose', 'RGrep', 'CloseQFixWin', 'EGrep', 'ToggleDamemoji', 'Grepadd', 'EGrepadd', 'MoveToQFixWin', 'Grep', 'ToggleLocationListMode', 'VGrep', 'ToggleQFixWin', 'FList', 'FGrepadd', 'QFixCopen']}}
 NeoBundleLazy 'glidenote/memolist.vim', { 'depends' : "vimfiler" , 'autoload': {'commands': ['MemoList', 'MemoGrep', 'MemoNew']}}
-"}}}2
+"}}}3
 
-" Script Quick Test {{{2
+" Script Quick Test {{{3
 NeoBundle 'thinca/vim-quickrun'
-"}}}2
+"}}}3
 
-" File handling {{{2
+" File handling {{{3
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundleLazy 'kien/ctrlp.vim', {'autoload': {'commands': ['CtrlPMixed', 'CtrlPClearAllCaches', 'CtrlPCurWD', 'CtrlP', 'CtrlPRTS', 'CtrlPBuffer', 'CtrlPMRUFiles', 'CtrlPBookmarkDirAdd', 'CtrlPDir', 'CtrlPRoot', 'CtrlPChange', 'ClearCtrlPCache', 'CtrlPLine', 'ClearAllCtrlPCaches', 'CtrlPBufTagAll', 'CtrlPClearCache', 'CtrlPQuickfix', 'CtrlPBufTag', 'CtrlPTag', 'CtrlPCurFile', 'CtrlPLastMode', 'CtrlPUndo', 'CtrlPChangeAll', 'CtrlPBookmarkDir']}}
 NeoBundleLazy 'mbbill/VimExplorer', {'autoload': {'commands': [{'complete': 'file', 'name': 'VEC'}, {'complete': 'file', 'name': 'VE'}]}}
 NeoBundleLazy 'Shougo/vimfiler.git' , {'autoload' : {'commands' : [ "VimFilerTab" , "VimFiler" , "VimFilerExplorer" ]},'explorer' : 1}
-"}}}2
+"}}}3
 
-" Writting Support {{{2
+" Writting Support {{{3
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Townk/vim-autoclose'
@@ -78,9 +88,9 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle  'junegunn/vim-easy-align', { 'autoload': {'commands' : ['EasyAlign'] }}
 NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundleLazy 'tomtom/tcomment_vim.git', {'autoload': {'commands': [{'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentBlock'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentRight'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TComment'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentMaybeInline'}, {'complete': 'customlist,tcomment#Complete', 'name': 'TCommentAs'}, {'complete': 'customlist,tcomment#CompleteArgs', 'name': 'TCommentInline'}]}}
-"}}}2
+"}}}3
 
-" Tagging {{{2
+" Tagging {{{3
 " [TODO] -I is not worked my mingw64. so I need to add include path to make
 " file and build by my self.
 if has('win32') || has('win64')
@@ -99,20 +109,20 @@ endif
 if executable('ctags')
 	NeoBundleLazy 'majutsushi/tagbar', {'augroup': 'TagbarAutoCmds', 'autoload': {'commands': ['TagbarGetTypeConfig', 'TagbarSetFoldlevel', 'TagbarOpen', 'TagbarDebug', 'Tagbar', 'TagbarClose', 'TagbarTogglePause', 'TagbarOpenAutoClose', 'TagbarDebugEnd', 'TagbarCurrentTag', 'TagbarShowTag', 'TagbarToggle']}}
 endif
-"}}}2
+"}}}3
 
-" Markdown {{{2
+" Markdown {{{3
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'plasticboy/vim-markdown' , {'depends' : 'godlygeek/tabular'}
 NeoBundle 'Shougo/unite-outline' , {'depends': 'Shougo/unite.vim' }
 NeoBundleLazy 'kannokanno/previm', {'depends': 'tyru/open-browser.vim' , 'autoload': {'commands': ['PrevimOpen']}}
-"}}}2
+"}}}3
 
-"Jav ascript{{{2
+"Java ascript{{{3
 NeoBundle 'pangloss/vim-javascript'
-"}}}2
+"}}}3
 
-" C# {{{2
+" C# {{{3
 NeoBundle 'OrangeT/vim-csharp' "syntax
 " MSBuild is in C:\\Windows
 " ex) C:\Windows\Microsoft.NET\Framework64\v4.0.30319
@@ -127,85 +137,88 @@ NeoBundleLazy 'nosami/Omnisharp', {
 \   }
 \ }
 endif
-" }}}2
+" }}}3
 
-"Visualize {{{2
+"Visualize {{{3
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'w0ng/vim-hybrid'
 NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'vim-scripts/AnsiEsc.vim'
 NeoBundle 'kien/rainbow_parentheses.vim'
-"}}}2
+"}}}3
 
-" Redmine {{{2
+" Redmine {{{3
 NeoBundle 'mattn/webapi-vim'
 "ref[rmine:http://blog.basyura.org/entry/20130106/p1]
 NeoBundle 'basyura/rmine.vim'
-" }}}2
+" }}}3
 
-" cmigeo(comment out) {{{2
+" cmigeo {{{3
+" [Todo] Fix that building automatically
 "NeoBundle 'haya14busa/cmigemo'
 "NeoBundleLazy 'koron/cmigemo', {
 "\   'build': {
 "\	  'windows': 'mingw32-make -f compile/Make_mingw.mak',
 "\   }
 "\ }
-" }}}2
+" }}}3
 
-" Presentation {{2
+" Presentation {{3
 NeoBundle "sotte/presenting.vim"
-"}}}2
+"}}}3
 
-" Ref Doc {{{2
+" Ref Doc {{{3
 NeoBundleLazy 'thinca/vim-ref', {'autoload': {'unite_sources': ['ref'], 'mappings': [['sxn', '<Plug>(ref-keyword)']], 'commands': [{'complete': 'customlist,ref#complete', 'name': 'Ref'}, 'RefHistory']}}
-" }}}2
+" }}}3
 
+" Web access {{{3
+if executable("w3m")
+	NeoBundle "yuratomo/w3m.vim"
+endif
+"}}}3
 
-"{{{5
-NeoBundle "yuratomo/w3m.vim"
-"}}}5
-
-"NeoBundle Config: End Proc{{{5
+" NeoBundle Config: End Proc{{{5
 call neobundle#end()
 filetype plugin indent on
 NeoBundleCheck "Can be skip if you want to ask everytime up
 " }}}5
 
+
 "------------------------------
-" }}}1 NeoBundle Plugins
+" }}}2 Install NeoBundle Plugins
 "------------------------------
 
-"==================================
-" NeoBundle Plugin Settings {{{1
-"==================================
+"------------------------------
+" Configure NeoBundle Plugins {{{2
+"------------------------------
 
-"QuickRun {{{2
-" config{{{3
+"QuickRun {{{3
+" config{{{4
 let s:bundle = neobundle#get("vim-quickrun")
 function! s:bundle.hooks.on_source(bundle)
 let g:quickrun_config={'*': {'hook/time/enable': 1},{'split':''} }
 endfunction
 unlet s:bundle
-"}}}3
+"}}}4
 " For ez using :Tmp <ext> or :Temp <ext> (e.g. :Tmp py => we have tmp.py )
 command! -nargs=1 -complete=filetype Tmp call EditTmpFile(<f-args>)
 command! -nargs=1 -complete=filetype Temp call EditTmpFile(<f-args>)
 function! EditTmpFile(ext)
 	execute 'edit' $TMP.'/.vim_tmp/tmp.'.a:ext
 endfunction
-"}}}2
+"}}}3
 
-"memolist {{{2
+"memolist {{{3
 let g:memolist_memo_suffix = "md.txt"
 let g:memolist_prompt_tags = 1
 let g:memolist_qfixgrep = 1
 let g:memolist_vimfiler = 1
 let g:memolist_vimfiler_option ="" "No split
 au BufNewFile,BufRead *.{md.txt,md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-"}}}2
+"}}}3
 
-"vimfiler {{{2
+"vimfiler {{{3
 let g:vimfiler_as_default_explorer = 1
 let s:bundle = neobundle#get("vimfiler")
 function! s:bundle.hooks.on_source(bundle)
@@ -223,25 +236,25 @@ function! s:bundle.hooks.on_source(bundle)
 	endfunction
 endfunction
 unlet s:bundle
-"}}}2
+"}}}3
 
-"indent-guide {{{2
+"indent-guide {{{3
 let g:indent_guides_enable_on_vim_startup = 1
-"}}}2
+"}}}3
 
-"unite-outline {{{2
+"unite-outline {{{3
 let g:unite_winwidth = 40
 let g:unite_split_rule = "rightbelow"
 nnoremap <silent> <Leader>o :<C-u>Unite -vertical -no-quit outline<CR>
-"}}}2
+"}}}3
 
-" CTRLP {{{2
+" CTRLP {{{3
 if has("win32") || has("win64")
 	let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
 endif
-"}}}2
+"}}}3
 
-" neocomplete{{{2
+" neocomplete{{{3
 let g:neocomplete#acp_enableAtStartUp = 0
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_ignore_case = 1
@@ -264,16 +277,20 @@ if !exists('g:neocomplete#sources#omni#input_patterns')
 endif
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-"}}}2
+"}}}3
 
-" W3M {{{2
+" W3M {{{3
 "let g:w3m#command = ''
-"}}}2
+"}}}3
 
-"==== ==============================
-" }}}1 End NeoBundle Plugin Settings
-"==================================
+"----------------------------------------
+" }}}2 End of Configure NeoBundle Plugins
+"----------------------------------------
 
+endif "executable git and curl for bundle.
+"==========================================
+"}}}1 End of All NeoBundle Configulation
+"==========================================
 
 "==================================
 " General Settings
@@ -294,7 +311,6 @@ set incsearch
 set showcmd
 set modeline
 set modelines=5
-colorscheme Tomorrow-Night
 
  " Easy Todo {{{
 " Replace todo list on/off on Visual mode and Normal mode
@@ -339,6 +355,9 @@ augroup BinaryXXD
 augroup END
 "}}}
 
+" If execute NeoBundle
+if executable('git') && executable('curl')
+colorscheme Tomorrow-Night
 " ColorSyntax {{{2
 augroup omnisharp_commands
     autocmd!
@@ -364,6 +383,7 @@ augroup rainbowparentheses
 	au Syntax * RainbowParenthesesLoadBraces
 augroup END
 "2}}}
+endif
 
 set rtp+=$HOME/.vim/
 runtime!  conf.d/*.vim
