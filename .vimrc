@@ -42,9 +42,9 @@ endfunction
 function! InstallNeoBundleIfNot()
 	" If cannot find neobundle/autoload directory clone from github
 	" ( not exist, it is not polite condition)
-	"if !s:supports.neobundle
+	"if !g:supports.neobundle
 	if !isdirectory( expand(s:env.path.neobundle . "/" . "autoload" ))
-		if s:supports.git
+		if g:supports.git
 			try
 				execute( "!git clone " . s:env.url.neobundle . " " . expand(s:env.path.neobundle) )
 			catch /:E117:/
