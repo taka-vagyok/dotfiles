@@ -1,10 +1,73 @@
 " Add runtime path
 set rtp+=$HOME/.vim/
+
 " temp colorscheme for indent plugin {{{
-set background=dark
-colorscheme evening
+"set background=dark
+"colorscheme evening
 "}}}
-" temp directory detect{{{
+
+" Environment {{{
+function! VimrcEnvironment()
+	let env = {}
+	let env.is_win = has('win32') || has('win64')
+	let user_dir =  '~/.vim'
+	"let user_dir =  expand('~/.vim')
+	let env.path = {
+				\ 	'user':          user_dir,
+				\ 	'local_vimrc':   user_dir . 'conf.d/*.vim',
+				\ 	'bundledir':     user_dir . '/bundle',
+				\ 	'neobundle':     user_dir . '/bundle/neobundle.vim',
+				\ 	'localbundle':   user_dir . '/local.budle.conf',
+				\ 	'tmp':           has("$TMP") ? $TMP.'/.vim_tmp' : '/tmp',
+				\ }
+	let env.url = {
+				\ 'neobundle': 'https://github.com/Shougo/neobundle.vim',
+				\}
+	return env
+endfunction
+
+function! VimrcSupports()
+	let supports = {}
+	"[Todo] bunddle support environment
+	let supports.git = executable('git')
+	let supports.neobundle = 0
+	let supports.loaded_neobundle = 0
+	"let supports.neobundle =  isdirectory( expand(s:env.path.neobundle . "/" . "autoload" ))
+	let supports.neocomplete = has('lua')
+				\ && (v:version > 703 || (v:version == 703 && has('patch885')))
+	let supports.loadedneobundles = 0
+	return supports
+endfunction
+
+function! InstallNeoBundleIfNot()
+	" If cannot find neobundle/autoload directory clone from github
+	" ( not exist, it is not polite condition)
+	"if !s:supports.neobundle
+	if !isdirectory( expand(s:env.path.neobundle . "/" . "autoload" ))
+		if s:supports.git
+			try
+				execute( "!git clone " . s:env.url.neobundle . " " . expand(s:env.path.neobundle) )
+			catch /:E117:/
+				echo "Cannot find neobundle and fail to git clone(" . s:env.url.neobundle .")"
+				return 0
+			endtry
+			" Update support condition
+			return 1
+		else
+			echo "Cannot find neobundle directory and git command."
+			return 0
+		endif
+	endif
+	return 1
+endfunction
+
+let s:env = VimrcEnvironment()
+let g:supports = VimrcSupports()
+let g:supports.neobundle = InstallNeoBundleIfNot()
+" }}}
+
+
+"  temp directory detect{{{
 if $TMP == ''
  	let $TMP = '/tmp'
 endif
@@ -13,18 +76,17 @@ if !isdirectory($TMP.'/.vim_tmp')
 endif
 "}}}
 
+
 "==========================================
 " All NeoBundle Configulation{{{1
 "==========================================
-" [Todo] Need to change function like has_neobundle_config()
-if executable('git') && executable('curl')
-
+function! SetMyNeobundleEnable()
 "---------------------------------
  " Install NeoBundle Plugins {{{2
 "---------------------------------
 " NeoBundle Config: Start Proc {{{5
-set runtimepath+=~/.vim/bundle/neobundle.vim/
-call neobundle#begin(expand('~/.vim/bundle/'))
+execute "set runtimepath+=" . s:env.path.neobundle
+call neobundle#begin( expand( s:env.path.bundledir . "/" ))
 runtime! conf.neobundle.d/*.vim "for each enviroments bundles
 "}}}5
 "  Manage NeoBundle {{{3
@@ -141,11 +203,12 @@ endif
 
 "Visualize {{{3
 NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'w0ng/vim-hybrid'
-NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'vim-scripts/AnsiEsc.vim'
 NeoBundle 'kien/rainbow_parentheses.vim'
+"colorscheme
+NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'chriskempson/vim-tomorrow-theme'
 "}}}3
 
 " Redmine {{{3
@@ -166,6 +229,7 @@ NeoBundle 'basyura/rmine.vim'
 
 " Presentation {{3
 NeoBundle "sotte/presenting.vim"
+NeoBundle "thinca/vim-showtime"
 "}}}3
 
 " Ref Doc {{{3
@@ -186,14 +250,14 @@ NeoBundleCheck "Can be skip if you want to ask everytime up
 
 
 "------------------------------
-" }}}2 Install NeoBundle Plugins
+"  }}}2 Install NeoBundle Plugins
 "------------------------------
 
 "------------------------------
 " Configure NeoBundle Plugins {{{2
 "------------------------------
 
-"QuickRun {{{3
+ "QuickRun {{{3
 " config{{{4
 let s:bundle = neobundle#get("vim-quickrun")
 function! s:bundle.hooks.on_source(bundle)
@@ -239,6 +303,8 @@ unlet s:bundle
 "}}}3
 
 "indent-guide {{{3
+set background=dark
+colorscheme evening
 let g:indent_guides_enable_on_vim_startup = 1
 "}}}3
 
@@ -286,8 +352,9 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 "----------------------------------------
 " }}}2 End of Configure NeoBundle Plugins
 "----------------------------------------
-
-endif "executable git and curl for bundle.
+return 1
+endfunction
+let g:supports.loaded_neobundle = SetMyNeobundleEnable()
 "==========================================
 "}}}1 End of All NeoBundle Configulation
 "==========================================
@@ -301,7 +368,6 @@ set noundofile
 set tabstop=4
 set shiftwidth=4
 set clipboard+=unnamed  "Enable Windows Clipbord
-set background=dark
 set nonumber
 set splitbelow "新しいウィンドウを下に開く
 set splitright "新しいウィンドウを右に開く
@@ -311,6 +377,12 @@ set incsearch
 set showcmd
 set modeline
 set modelines=5
+
+" ファイルを開いたときに, カレントディレクトリを編集中のファイルディレクトリに変更
+augroup filelcd
+  autocmd!
+  autocmd BufEnter * lcd %:p:h
+augroup END
 
  " Easy Todo {{{
 " Replace todo list on/off on Visual mode and Normal mode
@@ -331,9 +403,11 @@ endfunction
 " }}}
 
 "IME control for windows {{{
-inoremap <silent> <ESC> <ESC>
+if !has("gui-running")
+inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
 inoremap <silent> <C-[> <ESC>
 inoremap <silent> <C-j> <C-^>
+endif
 " }}}
 
 "Add Encording if not kaoriya vim{{{
@@ -355,37 +429,42 @@ augroup BinaryXXD
 augroup END
 "}}}
 
-" If execute NeoBundle
-if executable('git') && executable('curl')
-colorscheme Tomorrow-Night
-" ColorSyntax {{{2
-augroup omnisharp_commands
-    autocmd!
-    "Set autocomplete function to OmniSharp (if not using YouCompleteMe completion plugin)
-    autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
-    " Synchronous build (blocks Vim)
-    "autocmd FileType cs nnoremap <F5> :wa!<cr>:OmniSharpBuild<cr>
-    " Builds can also run asynchronously with vim-dispatch installed
-    autocmd FileType cs nnoremap <leader>b :wa!<cr>:OmniSharpBuildAsync<cr>
-    " automatic syntax check on events (TextChanged requires Vim 7.4)
-    autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
-    " Automatically add new cs files to the nearest project on save
-    autocmd BufWritePost *.cs call OmniSharp#AddToProject()
-    "show type information automatically when the cursor stops moving
-    autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-augroup END
+if g:supports.neobundle
+	set background=dark
+	colorscheme Tomorrow-Night
+else
+	set background=dark
+	colorscheme evening
+endif
+if g:supports.neobundle
+	" ColorSyntax {{{2
+	augroup omnisharp_commands
+		autocmd!
+		"Set autocomplete function to OmniSharp (if not using YouCompleteMe completion plugin)
+		autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+		" Synchronous build (blocks Vim)
+		"autocmd FileType cs nnoremap <F5> :wa!<cr>:OmniSharpBuild<cr>
+		" Builds can also run asynchronously with vim-dispatch installed
+		autocmd FileType cs nnoremap <leader>b :wa!<cr>:OmniSharpBuildAsync<cr>
+		" automatic syntax check on events (TextChanged requires Vim 7.4)
+		autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+		" Automatically add new cs files to the nearest project on save
+		autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+		"show type information automatically when the cursor stops moving
+		autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+	augroup END
 
-" () をハイライト
-augroup rainbowparentheses
-	au VimEnter * RainbowParenthesesToggle
-	au Syntax * RainbowParenthesesLoadRound
-	au Syntax * RainbowParenthesesLoadSquare
-	au Syntax * RainbowParenthesesLoadBraces
-augroup END
-"2}}}
+	" () をハイライト
+	augroup rainbowparentheses
+		au VimEnter * RainbowParenthesesToggle
+		au Syntax * RainbowParenthesesLoadRound
+		au Syntax * RainbowParenthesesLoadSquare
+		au Syntax * RainbowParenthesesLoadBraces
+	augroup END
+	"2}}}
 endif
 
-set rtp+=$HOME/.vim/
-runtime!  conf.d/*.vim
+"set rtp+=$HOME/.vim/
+execute "runtime! " . s:env.path.local_vimrc
 
 "%EOF
