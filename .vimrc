@@ -228,6 +228,11 @@ if executable("w3m")
 endif
 "}}}3
 
+"VCS {{{3
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'vim-scripts/vcscommand.vim'
+"}}}3
+
 " NeoBundle Config: End Proc{{{5
 call neobundle#end()
 filetype plugin indent on
