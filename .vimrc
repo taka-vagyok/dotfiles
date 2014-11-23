@@ -144,7 +144,9 @@ NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Townk/vim-autoclose'
 "NeoBUndle 'jiangmiao/auto-pairs'
-NeoBundle 'Shougo/neocomplete.vim'
+if g:supports.neocomplete
+	NeoBundle 'Shougo/neocomplete.vim'
+endif
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle  'junegunn/vim-easy-align', { 'autoload': {'commands' : ['EasyAlign'] }}
