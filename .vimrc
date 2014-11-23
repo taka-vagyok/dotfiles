@@ -33,8 +33,6 @@ endfunction
 
 function! InstallNeoBundleIfNot()
 	" If cannot find neobundle/autoload directory clone from github
-	" ( not exist, it is not polite condition)
-	"if !g:supports.neobundle
 	if !isdirectory( expand(s:env.path.neobundle . "/" . "autoload" ))
 		if g:supports.git
 			try
@@ -43,7 +41,6 @@ function! InstallNeoBundleIfNot()
 				echo "Cannot find neobundle and fail to git clone(" . s:env.url.neobundle .")"
 				return 0
 			endtry
-			" Update support condition
 			return 1
 		else
 			echo "Cannot find neobundle directory and git command."
@@ -91,6 +88,7 @@ NeoBundleLazy 'Shougo/vimshell', { 'depends' : "Shougo/vimproc" , 'autoload': {'
 "}}}3
 
 " Common {{{3
+NeoBundle 'Shougo/unite.vim'
 NeoBundle 'thinca/vim-singleton' "Prevent multi window
 NeoBundle 'deton/jasegment.vim'
 if !has('kaoriya')
@@ -119,7 +117,6 @@ NeoBundle 'thinca/vim-quickrun'
 "}}}3
 
 " File handling {{{3
-NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundleLazy 'kien/ctrlp.vim', {'autoload': {'commands': ['CtrlPMixed', 'CtrlPClearAllCaches', 'CtrlPCurWD', 'CtrlP', 'CtrlPRTS', 'CtrlPBuffer', 'CtrlPMRUFiles', 'CtrlPBookmarkDirAdd', 'CtrlPDir', 'CtrlPRoot', 'CtrlPChange', 'ClearCtrlPCache', 'CtrlPLine', 'ClearAllCtrlPCaches', 'CtrlPBufTagAll', 'CtrlPClearCache', 'CtrlPQuickfix', 'CtrlPBufTag', 'CtrlPTag', 'CtrlPCurFile', 'CtrlPLastMode', 'CtrlPUndo', 'CtrlPChangeAll', 'CtrlPBookmarkDir']}}
 NeoBundleLazy 'mbbill/VimExplorer', {'autoload': {'commands': [{'complete': 'file', 'name': 'VEC'}, {'complete': 'file', 'name': 'VE'}]}}
