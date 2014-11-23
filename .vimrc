@@ -1,23 +1,16 @@
-" Add runtime path
-set rtp+=$HOME/.vim/
-
-" temp colorscheme for indent plugin {{{
-"set background=dark
-"colorscheme evening
-"}}}
-
-" Environment {{{
+" ================================
+" Environment/Supports {{{1
+" ================================
 function! VimrcEnvironment()
 	let env = {}
 	let env.is_win = has('win32') || has('win64')
 	let user_dir =  '~/.vim'
-	"let user_dir =  expand('~/.vim')
 	let env.path = {
 				\ 	'user':          user_dir,
-				\ 	'local_vimrc':   user_dir . 'conf.d/*.vim',
+				\ 	'local_vimdir':   user_dir . '/conf.d/',
 				\ 	'bundledir':     user_dir . '/bundle',
 				\ 	'neobundle':     user_dir . '/bundle/neobundle.vim',
-				\ 	'localbundle':   user_dir . '/local.budle.conf',
+				\ 	'localbundle':   user_dir . '/local.bundle.conf',
 				\ 	'tmp':           has("$TMP") ? $TMP.'/.vim_tmp' : '/tmp',
 				\ }
 	let env.url = {
@@ -32,7 +25,6 @@ function! VimrcSupports()
 	let supports.git = executable('git')
 	let supports.neobundle = 0
 	let supports.loaded_neobundle = 0
-	"let supports.neobundle =  isdirectory( expand(s:env.path.neobundle . "/" . "autoload" ))
 	let supports.neocomplete = has('lua')
 				\ && (v:version > 703 || (v:version == 703 && has('patch885')))
 	let supports.loadedneobundles = 0
@@ -62,32 +54,27 @@ function! InstallNeoBundleIfNot()
 endfunction
 
 let s:env = VimrcEnvironment()
-let g:supports = VimrcSupports()
-let g:supports.neobundle = InstallNeoBundleIfNot()
-" }}}
-
-
-"  temp directory detect{{{
-if $TMP == ''
- 	let $TMP = '/tmp'
+if !has('g:supports')
+	let g:supports = VimrcSupports()
 endif
-if !isdirectory($TMP.'/.vim_tmp')
-	call mkdir($TMP.'/.vim_tmp')
-endif
-"}}}
-
+" ================================
+"}}}1
+" ================================
 
 "==========================================
 " All NeoBundle Configulation{{{1
 "==========================================
-function! SetMyNeobundleEnable()
+if g:supports.neobundle == 0
+	let g:supports.neobundle = InstallNeoBundleIfNot()
+endif
 "---------------------------------
- " Install NeoBundle Plugins {{{2
+" Install NeoBundle Plugins {{{2
 "---------------------------------
 " NeoBundle Config: Start Proc {{{5
+function! SetMyNeobundleEnable()
 execute "set runtimepath+=" . s:env.path.neobundle
 call neobundle#begin( expand( s:env.path.bundledir . "/" ))
-runtime! conf.neobundle.d/*.vim "for each enviroments bundles
+execute "runtime! " . s:env.path.localbundle . "/*.vim"
 "}}}5
 "  Manage NeoBundle {{{3
 NeoBundleFetch 'Shougo/neobundle.vim'
@@ -160,7 +147,8 @@ NeoBundleLazy 'tomtom/tcomment_vim.git', {'autoload': {'commands': [{'complete':
 if has('win32') || has('win64')
 	if executable('mingw32-make')
 		let g:mingw_include = 'C:/bin/mingw64/include/'
-		NeoBundle 'vim-jp/ctags', { 'build' : { 'windows' : 'mingw32-make.exe -I ' . g:mingw_include . ' -f mk_mingw.mak' , } }
+		let $PATH = $PATH .";" . g:mingw_include
+		NeoBundle 'vim-jp/ctags', { 'build' : { 'windows' : 'mingw32-make.exe -I' . g:mingw_include . ' -f mk_mingw.mak' , } }
 	else
 		NeoBundle 'vim-jp/ctags'
 	endif
@@ -188,10 +176,9 @@ NeoBundle 'pangloss/vim-javascript'
 
 " C# {{{3
 NeoBundle 'OrangeT/vim-csharp' "syntax
-" MSBuild is in C:\\Windows
+" MSBuild is in C:\Windows\Microsoft.N
 " ex) C:\Windows\Microsoft.NET\Framework64\v4.0.30319
-" set path to such a path
-if executable('python') && executable('msbuild')
+if executable('python') && ( executable('msbuild') || executable('xbuild') )
 NeoBundleLazy 'nosami/Omnisharp', {
 \   'autoload': {'filetypes': ['cs'], 'commands' : ['OmniSharpStartServer', 'OmniSharpStartServerSolution']},
 \   'build': {
@@ -248,17 +235,20 @@ endif
 call neobundle#end()
 filetype plugin indent on
 NeoBundleCheck "Can be skip if you want to ask everytime up
+return 1
+endfunction
+
 " }}}5
-
-
 "------------------------------
 "  }}}2 Install NeoBundle Plugins
 "------------------------------
-
+if g:supports.loaded_neobundle == 0
+	let g:supports.loaded_neobundle = SetMyNeobundleEnable()
+endif
 "------------------------------
 " Configure NeoBundle Plugins {{{2
 "------------------------------
-
+if g:supports.loaded_neobundle
  "QuickRun {{{3
 " config{{{4
 let s:bundle = neobundle#get("vim-quickrun")
@@ -271,7 +261,10 @@ unlet s:bundle
 command! -nargs=1 -complete=filetype Tmp call EditTmpFile(<f-args>)
 command! -nargs=1 -complete=filetype Temp call EditTmpFile(<f-args>)
 function! EditTmpFile(ext)
-	execute 'edit' $TMP.'/.vim_tmp/tmp.'.a:ext
+	if !isdirectory( s:env.path.tmp )
+		call mkdir( s:env.path.tmp )
+	endif
+	execute 'edit' s:env.path.tmp . 'tmp.' . a:ext
 endfunction
 "}}}3
 
@@ -288,7 +281,7 @@ au BufNewFile,BufRead *.{md.txt,md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 let g:vimfiler_as_default_explorer = 1
 let s:bundle = neobundle#get("vimfiler")
 function! s:bundle.hooks.on_source(bundle)
-	let g:vimfiler_data_directory = $TMP . '/.vimfiler'
+	let g:vimfiler_data_directory = s:env.path.tmp . '/.vimfiler'
 	let g:vimfiler_safe_mode_by_default = 0
 	"デフォルトのキーマッピングを変更
 	"nnoremap <silent> <Leader>fe :<C-u>VimFilerBufferDir -quit<CR>
@@ -317,7 +310,7 @@ nnoremap <silent> <Leader>o :<C-u>Unite -vertical -no-quit outline<CR>
 "}}}3
 
 " CTRLP {{{3
-if has("win32") || has("win64")
+if s:env.is_win
 	let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
 endif
 "}}}3
@@ -350,13 +343,10 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " W3M {{{3
 "let g:w3m#command = ''
 "}}}3
-
+endif
 "----------------------------------------
 " }}}2 End of Configure NeoBundle Plugins
 "----------------------------------------
-return 1
-endfunction
-let g:supports.loaded_neobundle = SetMyNeobundleEnable()
 "==========================================
 "}}}1 End of All NeoBundle Configulation
 "==========================================
@@ -380,11 +370,12 @@ set showcmd
 set modeline
 set modelines=5
 
-" ファイルを開いたときに, カレントディレクトリを編集中のファイルディレクトリに変更
+" Move Current Directory when opening file {{{
 augroup filelcd
-  autocmd!
-  autocmd BufEnter * lcd %:p:h
+	autocmd!
+	autocmd BufEnter * lcd %:p:h
 augroup END
+" }}}
 
  " Easy Todo {{{
 " Replace todo list on/off on Visual mode and Normal mode
@@ -433,7 +424,8 @@ augroup END
 
 if g:supports.neobundle
 	set background=dark
-	colorscheme Tomorrow-Night
+	"colorscheme Tomorrow-Night
+	colorscheme hybrid
 else
 	set background=dark
 	colorscheme evening
@@ -467,6 +459,6 @@ if g:supports.neobundle
 endif
 
 "set rtp+=$HOME/.vim/
-execute "runtime! " . s:env.path.local_vimrc
+execute "runtime! " . expand( s:env.path.local_vimdir . "/" ) . "*vim"
 
 "%EOF
