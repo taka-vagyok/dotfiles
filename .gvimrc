@@ -1,10 +1,17 @@
-
-set background=dark
-if ($ft=='python')
-	colorscheme Tomorrow-Night
+"colorscheme
+if g:supports.loaded_neobundle
+	set background=dark
+	if ($ft=='python')
+		colorscheme Tomorrow-Night
+	else
+		"colorscheme iceberg
+		colorscheme hybrid
+	endif
 else
-	colorscheme hybrid
+	colorscheme evening
 endif
+"singleton
+call singleton#enable()
 
 " ime setting
 if has('multi_byte_ime') || has('xim') || has('gui_macvim')
@@ -16,5 +23,13 @@ if has('multi_byte_ime') || has('xim') || has('gui_macvim')
   inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
 endif
 
-call singleton#enable()
-
+"window size
+set lines=50 columns=100
+"transparency
+if has('kaoriya')
+	gui
+	set transparency=235
+endif
+"misc
+set showtabline=2
+set guioptions-=T
