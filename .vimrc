@@ -251,15 +251,13 @@ endif
 " Configure NeoBundle Plugins {{{2
 "------------------------------
 if g:supports.loaded_neobundle
- "QuickRun {{{3
-" config{{{4
-let s:bundle = neobundle#get("vim-quickrun")
-function! s:bundle.hooks.on_source(bundle)
-let g:quickrun_config={'*': {'hook/time/enable': 1},{'split':''} }
-endfunction
-unlet s:bundle
-"}}}4
-" For ez using :Tmp <ext> or :Temp <ext> (e.g. :Tmp py => we have tmp.py )
+
+" QuickRun {{{3
+let g:quickrun_config={'*': {
+			\ 'hook/time/enable': 1 ,
+			\ 'split':''
+			\ } }
+" For ez script using :Tmp <ext> or :Temp <ext> (e.g. :Tmp py => we have tmp.py )
 command! -nargs=1 -complete=filetype Tmp call EditTmpFile(<f-args>)
 command! -nargs=1 -complete=filetype Temp call EditTmpFile(<f-args>)
 function! EditTmpFile(ext)
@@ -424,6 +422,7 @@ augroup BinaryXXD
 augroup END
 "}}}
 
+" ColorSyntax {{{
 if g:supports.neobundle
 	set background=dark
 	"colorscheme Tomorrow-Night
@@ -433,7 +432,6 @@ else
 	colorscheme evening
 endif
 if g:supports.neobundle
-	" ColorSyntax {{{2
 	augroup omnisharp_commands
 		autocmd!
 		"Set autocomplete function to OmniSharp (if not using YouCompleteMe completion plugin)
@@ -449,7 +447,6 @@ if g:supports.neobundle
 		"show type information automatically when the cursor stops moving
 		autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
 	augroup END
-
 	" () をハイライト
 	augroup rainbowparentheses
 		au VimEnter * RainbowParenthesesToggle
@@ -457,10 +454,11 @@ if g:supports.neobundle
 		au Syntax * RainbowParenthesesLoadSquare
 		au Syntax * RainbowParenthesesLoadBraces
 	augroup END
-	"2}}}
 endif
+" }}}
 
-"set rtp+=$HOME/.vim/
+" Load Local Setting {{{
 execute "runtime! " . expand( s:env.path.local_vimdir . "/" ) . "*vim"
+" }}}
 
 "%EOF
