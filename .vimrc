@@ -7,10 +7,10 @@ function! VimrcEnvironment()
 	let user_dir =  '~/.vim'
 	let env.path = {
 				\ 	'user':          user_dir,
-				\ 	'local_vimdir':   user_dir . '/conf.d/',
 				\ 	'bundledir':     user_dir . '/bundle',
 				\ 	'neobundle':     user_dir . '/bundle/neobundle.vim',
-				\ 	'localbundle':   user_dir . '/local.bundle.conf',
+				\ 	'local_vimrcs':  'conf.d',
+				\ 	'local_bundle':  'conf.d.bundle',
 				\ 	'tmp':           has("$TMP") ? $TMP.'/.vim_tmp' : '/tmp',
 				\ }
 	let env.url = {
@@ -71,7 +71,9 @@ endif
 function! SetMyNeobundleEnable()
 execute "set runtimepath+=" . s:env.path.neobundle
 call neobundle#begin( expand( s:env.path.bundledir . "/" ))
-execute "runtime! " . s:env.path.localbundle . "/*.vim"
+execute "set runtimepath+=" . s:env.path.user
+execute "runtime! " . s:env.path.local_bundle . "/*.vim"
+execute "set runtimepath-=" . s:env.path.user
 "}}}5
 "  Manage NeoBundle {{{3
 NeoBundleFetch 'Shougo/neobundle.vim'
@@ -253,10 +255,15 @@ endif
 if g:supports.loaded_neobundle
 
 " QuickRun {{{3
-let g:quickrun_config={'*': {
+let g:quickrun_config={
+			\ '*':{
 			\ 'hook/time/enable': 1 ,
-			\ 'split':''
-			\ } }
+			\ 'split':'' },
+			\ '_':{
+			\ 'runner' : 'vimproc',
+			\ 'runner/vimproc/updatetime' : 60
+			\ },
+			\}
 " For ez script using :Tmp <ext> or :Temp <ext> (e.g. :Tmp py => we have tmp.py )
 command! -nargs=1 -complete=filetype Tmp call EditTmpFile(<f-args>)
 command! -nargs=1 -complete=filetype Temp call EditTmpFile(<f-args>)
@@ -458,7 +465,9 @@ endif
 " }}}
 
 " Load Local Setting {{{
-execute "runtime! " . expand( s:env.path.local_vimdir . "/" ) . "*vim"
+execute "set runtimepath+=" . s:env.path.user
+execute "runtime! " . s:env.path.local_vimrcs . "/" . "*vim"
+execute "set runtimepath-=" . s:env.path.user
 " }}}
 
 "%EOF
