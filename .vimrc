@@ -133,6 +133,7 @@ NeoBundle 'Townk/vim-autoclose'
 if g:supports.neocomplete
 	NeoBundle 'Shougo/neocomplete.vim'
 endif
+NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle  'junegunn/vim-easy-align', { 'autoload': {'commands' : ['EasyAlign'] }}
