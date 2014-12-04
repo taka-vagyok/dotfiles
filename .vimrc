@@ -350,6 +350,45 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " W3M {{{3
 "let g:w3m#command = ''
 "}}}3
+
+"ref-vim {{{3
+let g:ref_use_vimproc=1
+"webdictサイトの設定
+let g:ref_source_webdict_sites = {
+\   'jj': {
+\     'url': 'http://dictionary.infoseek.ne.jp/word/%s',
+\   },
+\   'je': {
+\     'url': 'http://dictionary.infoseek.ne.jp/jeword/%s',
+\   },
+\   'ej': {
+\     'url': 'http://dictionary.infoseek.ne.jp/ejword/%s',
+\   },
+\   'wiki': {
+\     'url': 'http://ja.wikipedia.org/wiki/%s',
+\   },
+\ }
+let g:ref_webdict_cmd="w3c -s -dump %s"
+let g:ref_webdict_use_cache = 1
+let g:ref_webdict_encoding = 'utf-8'
+let g:ref_cache_dir = "$TMP/"
+let g:ref_webdict_cache_dir = "$TMP/"
+"デフォルトサイト
+let g:ref_source_webdict_sites.default = 'ej'
+
+"出力に対するフィルタ。最初の数行を削除
+" function! g:ref_source_webdict_sites.je.filter(output)
+"   return join(split(a:output, "\n")[15 :], "\n")
+" endfunction
+" function! g:ref_source_webdict_sites.ej.filter(output)
+"   return join(split(a:output, "\n")[15 :], "\n")
+" endfunction
+" function! g:ref_source_webdict_sites.wiki.filter(output)
+"   return join(split(a:output, "\n")[17 :], "\n")
+" endfunction
+"
+"}}}3
+
 endif
 "----------------------------------------
 " }}}2 End of Configure NeoBundle Plugins
