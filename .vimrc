@@ -416,6 +416,7 @@ set incsearch
 set showcmd
 set modeline
 set modelines=5
+syntax on
 
 " Move Current Directory when opening file {{{
 augroup filelcd
