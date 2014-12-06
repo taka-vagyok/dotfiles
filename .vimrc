@@ -407,6 +407,7 @@ set noundofile
 set tabstop=4
 set shiftwidth=4
 set clipboard+=unnamed  "Enable Windows Clipbord
+set backspace=indent,eol,start
 set nonumber
 set splitbelow "新しいウィンドウを下に開く
 set splitright "新しいウィンドウを右に開く
