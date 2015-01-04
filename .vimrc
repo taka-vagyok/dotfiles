@@ -420,10 +420,11 @@ set modelines=5
 syntax on
 
 " Move Current Directory when opening file {{{
-augroup filelcd
-	autocmd!
-	autocmd BufEnter * lcd %:p:h
-augroup END
+" Disable 2014/12/11 because this config have some plugin worked not file.
+"augroup filelcd
+"	autocmd!
+"	autocmd BufEnter * lcd %:p:h
+"augroup END
 " }}}
 
  " Easy Todo {{{
