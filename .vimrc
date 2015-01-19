@@ -9,12 +9,15 @@ function! VimrcEnvironment()
 				\ 	'user':          user_dir,
 				\ 	'bundledir':     user_dir . '/bundle',
 				\ 	'neobundle':     user_dir . '/bundle/neobundle.vim',
+				\ 	'Lucius':        user_dir . '/bundle/vim-lucius',
 				\ 	'local_vimrcs':  'conf.d',
 				\ 	'local_bundle':  'conf.d.bundle',
 				\ 	'tmp':           has("$TMP") ? $TMP.'/.vim_tmp' : '/tmp',
 				\ }
+	let env.mycs = "Lucius"
 	let env.url = {
 				\ 'neobundle': 'https://github.com/Shougo/neobundle.vim',
+				\ 'Lucius': 'https://github.com/jonathanfilip/vim-lucius',
 				\}
 	return env
 endfunction
@@ -24,6 +27,7 @@ function! VimrcSupports()
 	"[Todo] bunddle support environment
 	let supports.git = executable('git')
 	let supports.neobundle = 0
+	let supports.mycolorscheme = 0
 	let supports.loaded_neobundle = 0
 	let supports.neocomplete = has('lua')
 				\ && (v:version > 703 || (v:version == 703 && has('patch885')))
@@ -31,14 +35,15 @@ function! VimrcSupports()
 	return supports
 endfunction
 
-function! InstallNeoBundleIfNot()
-	" If cannot find neobundle/autoload directory clone from github
-	if !isdirectory( expand(s:env.path.neobundle . "/" . "autoload" ))
+function! InstallNeoBundleIfNot(dlurl,dlpath)
+	" <TODO> catch error download
+	"if !isdirectory( expand( a:dlpath . "/" . "autoload" ))
+	if !isdirectory( expand( a:dlpath ))
 		if g:supports.git
 			try
-				execute( "!git clone " . s:env.url.neobundle . " " . expand(s:env.path.neobundle) )
+				execute("r !git clone " . a:dlurl . " " . expand(a:dlpath))
 			catch /:E117:/
-				echo "Cannot find neobundle and fail to git clone(" . s:env.url.neobundle .")"
+				echo "Cannot find neobundle and fail to git clone(" . a:dlurl .")"
 				return 0
 			endtry
 			return 1
@@ -62,7 +67,10 @@ endif
 " All NeoBundle Configulation{{{1
 "==========================================
 if g:supports.neobundle == 0
-	let g:supports.neobundle = InstallNeoBundleIfNot()
+	let g:supports.neobundle = InstallNeoBundleIfNot( s:env.url.neobundle , s:env.path.neobundle )
+endif
+if g:supports.mycolorscheme == 0
+	let g:supports.mycolorscheme = InstallNeoBundleIfNot( s:env.url.Lucius , s:env.path.Lucius )
 endif
 "---------------------------------
 " Install NeoBundle Plugins {{{2
@@ -197,6 +205,7 @@ NeoBundle 'vim-scripts/AnsiEsc.vim'
 NeoBundle 'kien/rainbow_parentheses.vim'
 "colorscheme
 NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'jonathanfilip/vim-lucius'
 NeoBundle 'chriskempson/vim-tomorrow-theme'
 "}}}3
 
@@ -474,9 +483,13 @@ augroup END
 
 " ColorSyntax {{{
 if g:supports.neobundle
-	set background=dark
+	"set background=dark
+	"colorscheme hybrid
+	set background=light
+	if g:supports.mycolorscheme == 0
+		colorscheme s:env.mycs
+	endif
 	"colorscheme Tomorrow-Night
-	colorscheme hybrid
 else
 	set background=dark
 	colorscheme evening

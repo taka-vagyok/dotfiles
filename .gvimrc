@@ -1,11 +1,13 @@
 "colorscheme
 if g:supports.loaded_neobundle
-	set background=dark
+"	set background=dark
 	if ($ft=='python')
 		colorscheme Tomorrow-Night
 	else
-		"colorscheme iceberg
-		colorscheme hybrid
+		"colorscheme hybrid
+		set background=light
+		
+		colorscheme Lucius
 	endif
 else
 	colorscheme evening
