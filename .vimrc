@@ -16,8 +16,8 @@ function! VimrcEnvironment()
     let env.github = 'https://github.com/'
     let env.term_mycolo = {
                 \ 'name': 'term_forrest' ,
-                \ 'url': env.github . 'taka-vagyok/term_forrest_cls',
-                \ 'path': env.path.bundledir . 'term_forrest_cls',
+                \ 'url': env.github . 'taka-vagyok/term_forrest_cls.vim',
+                \ 'path': env.path.bundledir . 'term_forrest_cls.vim',
                 \ }
     let env.gui_mycolo = {
                 \ 'name': 'Lucius',
