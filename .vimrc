@@ -17,12 +17,12 @@ function! VimrcEnvironment()
     let env.term_mycolo = {
                 \ 'name': 'term_forrest' ,
                 \ 'url': env.github . 'taka-vagyok/term_forrest_cls.vim',
-                \ 'path': env.path.bundledir . 'term_forrest_cls.vim',
+                \ 'path': env.path.bundledir . '/term_forrest_cls.vim',
                 \ }
     let env.gui_mycolo = {
                 \ 'name': 'Lucius',
                 \ 'url': env.github . 'jonathanfilip/vim-lucius',
-                \ 'path': env.path.bundledir . 'vim-lucius',
+                \ 'path': env.path.bundledir . '/vim-lucius',
                 \ }
     if has('gui')
         let env.mycolo = env.gui_mycolo
