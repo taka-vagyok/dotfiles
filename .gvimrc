@@ -9,11 +9,11 @@ if g:supports.loaded_neobundle
 		
 		colorscheme Lucius
 	endif
+	call singleton#enable()
 else
 	colorscheme evening
 endif
 "singleton
-call singleton#enable()
 
 " ime setting
 if has('multi_byte_ime') || has('xim') || has('gui_macvim')
