@@ -20,7 +20,7 @@ function! VimrcEnvironment()
                 \ 'path': env.path.bundledir . '/term_forrest_cls.vim',
                 \ }
     let env.gui_mycolo = {
-                \ 'name': 'Lucius',
+                \ 'name': 'lucius',
                 \ 'url': env.github . 'jonathanfilip/vim-lucius',
                 \ 'path': env.path.bundledir . '/vim-lucius',
                 \ }
@@ -295,6 +295,8 @@ set incsearch
 set showcmd
 set modeline
 set modelines=5
+set smarttab
+set expandtab
 syntax on
 
 " Move Current Directory when opening file {{{
@@ -449,18 +451,15 @@ if g:supports.loaded_neobundle
     let g:neocomplete#enable_at_startup = 1
     let g:neocomplete#enable_ignore_case = 1
     let g:neocomplete#enable_smart_case = 1
-    let g:neocomplcache_min_syntax_length = 4
-    let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+    let g:neocomplete#min_keyword_length = 4
+    let g:neocomplete#use_vimproc = 1
+    let g:neocomplete#auto_completion_start_length = 2
+    let g:neocomplete#max_keyword_width = 50
     " Define keyword.
     if !exists('g:neocomplete#keyword_patterns')
         let g:neocomplete#keyword_patterns = {}
     endif
     let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-    " Define dictionary.
-    let g:neocomplcache_dictionary_filetype_lists = {
-                \ 'default' : '',
-                \ 'vimshell' : $HOME . '/.cache/.vimshell/command_history'
-                \ }
     "Enable heavy omni completion.
     if !exists('g:neocomplete#sources#omni#input_patterns')
         let g:neocomplete#sources#omni#input_patterns = {}
