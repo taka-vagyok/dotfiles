@@ -16,11 +16,13 @@ function! VimrcEnvironment()
     let env.github = 'https://github.com/'
     let env.term_mycolo = {
                 \ 'name': 'term_forrest' ,
+                \ 'bgcolor': 'dark' ,
                 \ 'url': env.github . 'taka-vagyok/term_forrest_cls.vim',
                 \ 'path': env.path.bundledir . '/term_forrest_cls.vim',
                 \ }
     let env.gui_mycolo = {
                 \ 'name': 'lucius',
+                \ 'bgcolor': 'light' ,
                 \ 'url': env.github . 'jonathanfilip/vim-lucius',
                 \ 'path': env.path.bundledir . '/vim-lucius',
                 \ }
@@ -357,11 +359,10 @@ if g:supports.neobundle
     if exists("syntax_on")
         syntax reset
     endif
-    set background=dark
     "colorscheme hybrid
     "set background=light
     if g:supports.loaded_neobundle == 1 && g:supports.mycolorscheme == 1
-        "execute ":colorscheme " . "term_forrest"
+        execute ":set background=" . s:env.mycolo.bgcolor
         execute ":colorscheme " . s:env.mycolo.name
     endif
 else
