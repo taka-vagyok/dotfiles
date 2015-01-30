@@ -300,6 +300,7 @@ set modelines=5
 set smarttab
 set expandtab
 syntax on
+set t_Co=256
 
 " Move Current Directory when opening file {{{
 " Disable 2014/12/11 because this config have some plugin worked not file.
