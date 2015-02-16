@@ -494,21 +494,23 @@ if g:supports.loaded_neobundle
     let g:ref_webdict_cmd="w3c -s -dump %s"
     let g:ref_webdict_use_cache = 1
     let g:ref_webdict_encoding = 'utf-8'
-    let g:ref_cache_dir = "$TMP/"
-    let g:ref_webdict_cache_dir = "$TMP/"
+    let g:ref_cache_dir = expand("$TMP")
+    let g:ref_webdict_cache_dir = expand("$TMP/.cache")
     "デフォルトサイト
     let g:ref_source_webdict_sites.default = 'ej'
-
+    if !has('$LANG')
+        let $LANG="C.CP932"
+    end
     "出力に対するフィルタ。最初の数行を削除
-    " function! g:ref_source_webdict_sites.je.filter(output)
-    "   return join(split(a:output, "\n")[15 :], "\n")
-    " endfunction
-    " function! g:ref_source_webdict_sites.ej.filter(output)
-    "   return join(split(a:output, "\n")[15 :], "\n")
-    " endfunction
-    " function! g:ref_source_webdict_sites.wiki.filter(output)
-    "   return join(split(a:output, "\n")[17 :], "\n")
-    " endfunction
+    function! g:ref_source_webdict_sites.je.filter(output)
+      return join(split(a:output, "\n")[15 :], "\n")
+    endfunction
+    function! g:ref_source_webdict_sites.ej.filter(output)
+      return join(split(a:output, "\n")[15 :], "\n")
+    endfunction
+    function! g:ref_source_webdict_sites.wiki.filter(output)
+      return join(split(a:output, "\n")[17 :], "\n")
+    endfunction
     "
     "}}}2
 
