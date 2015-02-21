@@ -455,8 +455,14 @@ if g:supports.loaded_neobundle
     let g:neocomplete#enable_smart_case = 1
     let g:neocomplete#min_keyword_length = 4
     let g:neocomplete#use_vimproc = 1
-    let g:neocomplete#auto_completion_start_length = 2
+    let g:neocomplete#auto_completion_start_length = 4
     let g:neocomplete#max_keyword_width = 50
+    let g:neocomplete#lock_iminsert = 0
+    " Delimeter pattern
+    if !exists('g:neocomplete#delimiter_patterns')
+        let g:neocomplete#delimiter_patterns = {}
+    end
+    let g:neocomplete#delimiter_patterns.txt = ['ÅA', 'ÅB'," ","Å@",","]
     " Define keyword.
     if !exists('g:neocomplete#keyword_patterns')
         let g:neocomplete#keyword_patterns = {}
