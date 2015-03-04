@@ -334,6 +334,15 @@ if !has("gui-running")
     inoremap <silent> <C-[> <ESC>
     inoremap <silent> <C-j> <C-^>
 endif
+"When enter insert mode, IME recovery.
+"When exit  insert mode, IME off and save.
+if !s:env.is_win
+    set t_SI+=[<r
+    set t_EI+=[<s[<0t
+    set t_te+=[<0[<s
+    "configure ESC wait time
+    set ttimeoutlen = 100
+endif
 " }}}
 
 "Add Encording if not kaoriya vim{{{
