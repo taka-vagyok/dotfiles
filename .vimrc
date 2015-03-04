@@ -341,7 +341,7 @@ if !s:env.is_win
     set t_EI+=[<s[<0t
     set t_te+=[<0[<s
     "configure ESC wait time
-    set ttimeoutlen = 100
+    set ttimeoutlen=100
 endif
 " }}}
 
