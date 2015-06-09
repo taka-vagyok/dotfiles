@@ -74,6 +74,7 @@ let s:env = VimrcEnvironment()
 if !has('g:supports')
     let g:supports = VimrcSupports()
 endif
+
 " ================================
 "}}}1
 " ================================
@@ -81,6 +82,8 @@ endif
 "---------------------------------
 " Install NeoBundle Plugins {{{1
 "---------------------------------
+"once indent off to load
+filetype indent off
 "NeoBundle Config: Start Proc {{{2
 if g:supports.neobundle == 0
     let g:supports.neobundle = InstallNeoBundleIfNot( s:env.url.neobundle , s:env.path.neobundle )
@@ -301,6 +304,20 @@ set smarttab
 set expandtab
 syntax on
 set t_Co=256
+
+"Filetype indent {{{
+if has("autocmd")
+    "ファイルタイプの検索を有効にする
+    filetype plugin on
+    "そのファイルタイプにあわせたインデントを利用する
+    filetype indent on
+    autocmd FileType ruby       setlocal sw=2 ts=2 et
+    autocmd FileType sh         setlocal sw=4 ts=4 et
+    autocmd FileType python     setlocal sw=4 ts=4 et
+    autocmd FileType cpp        setlocal sw=4 ts=4 et
+    autocmd FileType yaml       setlocal sw=2 ts=2 et
+endif
+"}}}
 
 " Move Current Directory when opening file {{{
 " Disable 2014/12/11 because this config have some plugin worked not file.
