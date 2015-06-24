@@ -200,6 +200,13 @@ function! SetMyNeobundleEnable()
     NeoBundle 'pangloss/vim-javascript'
     "}}}2
 
+    "python {{{2
+    NeoBundle 'osyo-manga/vim-watchdogs'
+    NeoBundle 'osyo-manga/shabadou.vim'
+    NeoBundle 'jceb/vim-hier'
+    NeoBundle 'tell-k/vim-autopep8'
+    "}}}
+
     " C# {{{2
     NeoBundle 'OrangeT/vim-csharp' "syntax
     " MSBuild is in C:\Windows\Microsoft.N
@@ -284,6 +291,11 @@ endif
 "==================================
 " VIM General Settings
 "==================================
+"set list
+"set listchars=tab:Å‚-,trail:-,extends:Å‚,precedes:Å·,nbsp:%,eol:?
+set wrap
+set textwidth=0
+set colorcolumn=80
 set noswapfile
 set nobackup
 set noundofile
@@ -314,7 +326,7 @@ if has("autocmd")
     autocmd FileType ruby       setlocal sw=2 ts=2 et
     autocmd FileType sh         setlocal sw=4 ts=4 et
     autocmd FileType python     setlocal sw=4 ts=4 et
-    autocmd FileType cpp        setlocal sw=4 ts=4 et
+    autocmd FileType cpp        setlocal sw=4 ts=4 noet
     autocmd FileType yaml       setlocal sw=2 ts=2 et
 endif
 "}}}
@@ -501,6 +513,12 @@ if g:supports.loaded_neobundle
     inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
     inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
     "}}}2
+
+"watchdog{{{3
+if exists("g:quickrun_config")
+    call watchdogs#setup(g:quickrun_config)
+endif
+"}}}
 
     " W3M {{{2
     "let g:w3m#command = ''
