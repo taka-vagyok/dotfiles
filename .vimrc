@@ -424,6 +424,7 @@ if g:supports.loaded_neobundle
                 \ 'runner' : 'vimproc',
                 \ 'runner/vimproc/updatetime' : 60
                 \ },
+                \ "watachdog_checker/_" : { 'runner/vimproc/updatetime' : 40 }
                 \}
     " For ez script using :Tmp <ext> or :Temp <ext> (e.g. :Tmp py => we have tmp.py )
     command! -nargs=1 -complete=filetype Tmp call EditTmpFile(<f-args>)
@@ -515,6 +516,12 @@ if g:supports.loaded_neobundle
     "}}}2
 
 "watchdog{{{3
+"
+let g:watchdogs_check_CursorHold_enable = 1
+let g:watchdogs_check_CursorHold_enables = {
+\	"python"     : 1,
+\}
+
 if exists("g:quickrun_config")
     call watchdogs#setup(g:quickrun_config)
 endif
