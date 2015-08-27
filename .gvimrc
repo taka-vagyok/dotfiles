@@ -5,7 +5,7 @@ if g:supports.loaded_neobundle
         colorscheme Tomorrow-Night
     else
         set background=light
-        colorscheme Lucius
+        colorscheme lucius
     endif
     call singleton#enable()
 else
@@ -28,8 +28,15 @@ set lines=50 columns=100
 "transparency
 if has('kaoriya')
     gui
-    set transparency=235
+    set transparency=245
+    if filereadable("C:/Windows/Fonts/RictyDiminishedDiscord-Regular.ttf")
+        " h‚Í1.5‚Ì”{”‚É‚·‚é‚ÆŒë·‚ªæ‚è‚É‚­‚¢‚ç‚µ‚¢
+        set guifont=Ricty_Diminished_Discord:h12
+    endif
 endif
+
 "misc
+set antialias
 set showtabline=2
 set guioptions-=T
+set guioptions+=m

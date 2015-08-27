@@ -223,6 +223,20 @@ function! SetMyNeobundleEnable()
     endif
     " }}}2
 
+    " Cpp {{{2
+    " MSBuild is in C:\Windows\Microsoft.N
+    " ex) C:\Windows\Microsoft.NET\Framework64\v4.0.30319
+    " if executable('python') && ( executable('msbuild') || executable('xbuild') )
+    "     NeoBundle 'vim-scripts/OmniCppComplete'
+    " endif
+    " }}}2
+
+    "style {{{2
+    if executable('astyle')
+        NeoBundle "datsuns/astyle.vim"
+    endif
+    "}}}
+
     "Visualize {{{2
     NeoBundle 'itchyny/lightline.vim'
     NeoBundle 'nathanaelkane/vim-indent-guides'
@@ -326,8 +340,11 @@ if has("autocmd")
     autocmd FileType ruby       setlocal sw=2 ts=2 et
     autocmd FileType sh         setlocal sw=4 ts=4 et
     autocmd FileType python     setlocal sw=4 ts=4 et
-    autocmd FileType cpp        setlocal sw=4 ts=4 noet
+    autocmd FileType cpp        setlocal sw=4 ts=4 et
+    autocmd FileType cs         setlocal sw=4 ts=4 et
     autocmd FileType yaml       setlocal sw=2 ts=2 et
+    autocmd FileType vim        setlocal sw=4 ts=4 et
+    autocmd FileType xml        setlocal sw=2 ts=2 et
 endif
 "}}}
 
