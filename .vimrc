@@ -235,11 +235,14 @@ function! SetMyNeobundleEnable()
     if executable('astyle')
         NeoBundle "datsuns/astyle.vim"
     endif
+    NeoBundleLazy 'alpaca-tc/auto-pairs', { 'autoload' : {
+      \ 'insert': 1 }}
     "}}}
 
     "Visualize {{{2
     NeoBundle 'itchyny/lightline.vim'
-    NeoBundle 'nathanaelkane/vim-indent-guides'
+    NeoBundle 'Yggdroot/indentLine'
+    "NeoBundle 'nathanaelkane/vim-indent-guides'
     NeoBundle 'vim-scripts/AnsiEsc.vim'
     NeoBundle 'kien/rainbow_parentheses.vim'
     " }}}2
@@ -537,6 +540,7 @@ if g:supports.loaded_neobundle
 let g:watchdogs_check_CursorHold_enable = 1
 let g:watchdogs_check_CursorHold_enables = {
 \	"python"     : 1,
+\	"ruby"     : 1,
 \}
 
 if exists("g:quickrun_config")
@@ -615,6 +619,15 @@ endif
     augroup END
     " }}}2
 
+    " indentLine
+    let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'calendar', 'thumbnail', 'tweetvim']
+
+    " auto-pair
+    let hooks = neobundle#get_hooks('auto-pairs')
+    function! hooks.on_post_source(bundle)
+      call auto_pairs#try_init()
+    endfunction
+    unlet hooks
 endif
 "----------------------------------------
 " }}} End of Configure NeoBundle Plugins

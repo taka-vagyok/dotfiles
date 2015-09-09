@@ -31,7 +31,7 @@ if has('kaoriya')
     set transparency=245
     if filereadable("C:/Windows/Fonts/RictyDiminishedDiscord-Regular.ttf")
         " h‚Í1.5‚Ì”{”‚É‚·‚é‚ÆŒë·‚ªæ‚è‚É‚­‚¢‚ç‚µ‚¢
-        set guifont=Ricty_Diminished_Discord:h12
+        set guifont=Ricty_Diminished_Discord:h12.5:w5
     endif
 endif
 
