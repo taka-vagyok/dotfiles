@@ -286,6 +286,7 @@ function! SetMyNeobundleEnable()
     "}}}2
 
     "VCS {{{2
+    NeoBundle 'kmnk/vim-unite-giti'
     NeoBundle 'tpope/vim-fugitive'
     NeoBundle 'vim-scripts/vcscommand.vim'
     "}}}2
