@@ -1,0 +1,83 @@
+"==================================
+" VIM General Settings
+"==================================
+"set list
+"set listchars=tab:â-,trail:-,extends:â,precedes:á,nbsp:%,eol:?
+set wrap
+set textwidth=0
+set colorcolumn=80
+set noswapfile
+set nobackup
+set noundofile
+set tabstop=4
+set shiftwidth=4
+set clipboard+=unnamed  "Enable Windows Clipbord
+set backspace=indent,eol,start
+set number
+set splitbelow "V‚µ‚¢ƒEƒBƒ“ƒhƒE‚ğ‰º‚ÉŠJ‚­
+set splitright "V‚µ‚¢ƒEƒBƒ“ƒhƒE‚ğ‰E‚ÉŠJ‚­
+set foldmethod=marker
+set ruler
+set incsearch
+set showcmd
+set modeline
+set modelines=5
+set smarttab
+set expandtab
+syntax on
+set t_Co=256
+
+"Filetype indent {{{
+if has("autocmd")
+    "ƒtƒ@ƒCƒ‹ƒ^ƒCƒv‚ÌŒŸõ‚ğ—LŒø‚É‚·‚é
+    filetype plugin on
+    "‚»‚Ìƒtƒ@ƒCƒ‹ƒ^ƒCƒv‚É‚ ‚í‚¹‚½ƒCƒ“ƒfƒ“ƒg‚ğ—˜—p‚·‚é
+    filetype indent on
+    autocmd FileType ruby       setlocal sw=2 ts=2 et
+    autocmd FileType sh         setlocal sw=4 ts=4 et
+    autocmd FileType python     setlocal sw=4 ts=4 et
+    autocmd FileType cpp        setlocal sw=4 ts=4 et
+    autocmd FileType cs         setlocal sw=4 ts=4 et
+    autocmd FileType yaml       setlocal sw=2 ts=2 et
+    autocmd FileType vim        setlocal sw=4 ts=4 et
+    autocmd FileType xml        setlocal sw=2 ts=2 et
+endif
+"}}}
+
+" Easy  Todo {{{
+" Replace todo list on/off on Visual mode and Normal mode
+" [TODO] plugin
+let g:toggle_complete_tag = "Done"
+nn <buffer> <Leader><Leader> :call ToggleCheckbox()<CR>
+vn <buffer> <Leader><Leader> :call ToggleCheckbox()<CR>
+function! ToggleCheckbox()
+    let l:line = getline('.')
+    if l:line =~ '^\-\s\[\s\]'
+        let l:result = substitute(l:line, '^-\s\[\s]', '- [x]', '') . ' [' . g:toggle_complete_tag . ':' . strftime('%Y/%m/%d %H:%M') . ']'
+        call setline('.', l:result)
+    elseif l:line =~ '^\-\s\[x\]'
+        let l:result = substitute( substitute(l:line, '^-\s\[x\]', '- [ ]', '') , '\s\[' . g:toggle_complete_tag . ':\d\{4}.\+]$' , '','')
+        call setline('.', l:result)
+    end
+endfunction
+" }}}
+
+"IME control for windows {{{
+if !has("gui-running")
+    inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
+    inoremap <silent> <C-[> <ESC>
+    inoremap <silent> <C-j> <C-^>
+endif
+"When enter insert mode, IME recovery.
+"When exit  insert mode, IME off and save.
+if !s:env.is_win
+    set t_SI+=[<r
+    set t_EI+=[<s[<0t
+    set t_te+=[<0[<s
+    "configure ESC wait time
+    set ttimeoutlen=100
+endif
+" }}}
+
+" vim: set ts=4 sw=4 smarttab expandtab :
+"%EOF
