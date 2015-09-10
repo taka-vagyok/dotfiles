@@ -12,7 +12,8 @@ set nobackup
 set noundofile
 set tabstop=4
 set shiftwidth=4
-set clipboard+=unnamed  "Enable Windows Clipbord
+set clipboard=unnamed  "Enable Windows Clipbord
+"set clipboard+=unnamed  "Enable Windows Clipbord
 set backspace=indent,eol,start
 set number
 set splitbelow "新しいウィンドウを下に開く
