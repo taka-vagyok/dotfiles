@@ -199,11 +199,22 @@ function! SetMyNeobundleEnable()
     NeoBundle 'pangloss/vim-javascript'
     "}}}2
 
-    "python {{{2
+    "style {{{
     NeoBundle 'osyo-manga/vim-watchdogs'
     NeoBundle 'osyo-manga/shabadou.vim'
     NeoBundle 'jceb/vim-hier'
-    NeoBundle 'tell-k/vim-autopep8'
+    "}}}
+
+    "python {{{2
+    if executable('autopep8')
+        NeoBundle 'tell-k/vim-autopep8'
+    endif
+    "}}}
+
+    "ruby {{{2
+    if executable('rubocop')
+        NeoBundle 'ngmy/vim-rubocop'
+    endif
     "}}}
 
     " C# {{{2
@@ -228,9 +239,6 @@ function! SetMyNeobundleEnable()
     " if executable('python') && ( executable('msbuild') || executable('xbuild') )
     "     NeoBundle 'vim-scripts/OmniCppComplete'
     " endif
-    " }}}2
-
-    "style {{{2
     if executable('astyle')
         NeoBundle "datsuns/astyle.vim"
     endif
