@@ -155,7 +155,6 @@ function! SetMyNeobundleEnable()
     NeoBundle 'terryma/vim-multiple-cursors'
     NeoBundle 'scrooloose/syntastic'
     NeoBundle 'Townk/vim-autoclose'
-    "NeoBUndle 'jiangmiao/auto-pairs'
     if g:supports.neocomplete
         NeoBundle 'Shougo/neocomplete.vim'
     endif
@@ -235,8 +234,6 @@ function! SetMyNeobundleEnable()
     if executable('astyle')
         NeoBundle "datsuns/astyle.vim"
     endif
-    NeoBundleLazy 'alpaca-tc/auto-pairs', { 'autoload' : {
-      \ 'insert': 1 }}
     "}}}
 
     "Visualize {{{2
@@ -622,13 +619,6 @@ endif
 
     " indentLine
     let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'calendar', 'thumbnail', 'tweetvim']
-
-    " auto-pair
-    let hooks = neobundle#get_hooks('auto-pairs')
-    function! hooks.on_post_source(bundle)
-      call auto_pairs#try_init()
-    endfunction
-    unlet hooks
 endif
 "----------------------------------------
 " }}} End of Configure NeoBundle Plugins
