@@ -3,6 +3,7 @@
 "==================================
 "set list
 "set listchars=tab:â-,trail:-,extends:â,precedes:á,nbsp:%,eol:?
+set wildmenu
 set wrap
 set textwidth=0
 set colorcolumn=80
@@ -62,21 +63,56 @@ function! ToggleCheckbox()
 endfunction
 " }}}
 
+"–ß‚é‚ğÄŒ»
+nmap <C-O> :vsc View.NavigateBackward<CR>
+nmap <C-I> :vsc View.NavigateForward<CR>
+
+"’è‹`‚ÖˆÚ“®
+nmap <C-]> :vsc Edit.GoToDefinition<CR>
+
+"ƒRƒƒ“ƒg
+map  TComment :vsc Edit.CommentSelection<CR>
+vmap TComment :vsc Edit.CommentSelection<CR>
+
+"¡‚¢‚éƒ^ƒuˆÈŠO‚ğÁ‚·
+"noremap to :vsc File.CloseAllButThis<CR>
+
+"ƒ^ƒuˆÚ“®‚ğ‘‚­‚·‚é
+map t1 1gt
+map t2 2gt
+map t3 3gt
+map t4 4gt
+map t5 5gt
+map t6 6gt
+map t7 7gt
+map t8 8gt
+map t9 9gt
+map t0 10gt
+
+" ŒŸõŒã‚É’†‰›‚ÉˆÚ“®
+map n nzz
+map N Nzz
+map * *zz
+map # #zz
+
+"s‚ÌÜ‚è•Ô‚µ‚ğ‚µ‚Ä‚¢‚é‚Æ‚«AŒ©‚½–Ú‚ÌŸ‚Ìs‚ÖˆÚ“®‚·‚é
+nnoremap j gj
+nnoremap k gk
+
+" ESC‚ğ“ñ‰ñ‰Ÿ‚·‚±‚Æ‚ÅƒnƒCƒ‰ƒCƒg‚ğÁ‚·
+nmap <silent> <Esc><Esc> :nohlsearch<CR>
+
 "IME control for windows {{{
-if !has("gui-running")
-    inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
-    inoremap <silent> <C-[> <ESC>
-    inoremap <silent> <C-j> <C-^>
-endif
+inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
+inoremap <silent> <C-[> <ESC>
+inoremap <silent> <C-j> <C-^>
 "When enter insert mode, IME recovery.
 "When exit  insert mode, IME off and save.
-if !s:env.is_win
-    set t_SI+=[<r
-    set t_EI+=[<s[<0t
-    set t_te+=[<0[<s
-    "configure ESC wait time
-    set ttimeoutlen=100
-endif
+set t_SI+=[<r
+set t_EI+=[<s[<0t
+set t_te+=[<0[<s
+"configure ESC wait time
+set ttimeoutlen=100
 " }}}
 
 " vim: set ts=4 sw=4 smarttab expandtab :
