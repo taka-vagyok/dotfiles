@@ -348,6 +348,7 @@ if has("autocmd")
     filetype indent on
     autocmd FileType ruby       setlocal sw=2 ts=2 et
     autocmd FileType sh         setlocal sw=4 ts=4 et
+    autocmd FileType postscr    setlocal sw=4 ts=4 et
     autocmd FileType python     setlocal sw=4 ts=4 et
     autocmd FileType cpp        setlocal sw=4 ts=4 et
     autocmd FileType cs         setlocal sw=4 ts=4 et
@@ -513,6 +514,10 @@ if g:supports.loaded_neobundle
     endif
     "}}}2
 
+    " whitespace {{{2
+    let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'thumbnail', 'tweetvim']
+    " }}}2
+
     " neocomplete{{{2
     let g:neocomplete#acp_enableAtStartUp = 0
     let g:neocomplete#enable_at_startup = 1
@@ -626,7 +631,7 @@ endif
     " }}}2
 
     " indentLine
-    let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'calendar', 'thumbnail', 'tweetvim']
+    let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'unite', 'calendar', 'thumbnail', 'tweetvim']
 endif
 "----------------------------------------
 " }}} End of Configure NeoBundle Plugins
