@@ -29,10 +29,12 @@ set lines=50 columns=100
 if has('kaoriya')
     gui
     set transparency=245
-    if filereadable("C:/Windows/Fonts/RictyDiminishedDiscord-Regular.ttf")
-        " h‚Í1.5‚Ì”{”‚É‚·‚é‚ÆŒë·‚ªæ‚è‚É‚­‚¢‚ç‚µ‚¢
-        set guifont=Ricty_Diminished_Discord:h12.5:w5
-    endif
+endif
+if filereadable("C:/Windows/Fonts/MyricaM.ttc")
+    set guifont=Myrica_M:h11
+elseif filereadable("C:/Windows/Fonts/RictyDiminishedDiscord-Regular.ttf")
+    " h‚Í1.5‚Ì”{”‚É‚·‚é‚ÆŒë·‚ªæ‚è‚É‚­‚¢‚ç‚µ‚¢
+    set guifont=Ricty_Diminished_Discord:h12.5
 endif
 
 "misc
