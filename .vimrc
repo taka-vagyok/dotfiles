@@ -508,6 +508,18 @@ if g:supports.loaded_neobundle
     nnoremap <silent> <Leader>o :<C-u>Unite -vertical -no-quit outline<CR>
     "}}}2
 
+    "unite{{{2
+    " ウィンドウを分割して開く
+    au FileType unite nnoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
+    au FileType unite inoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
+    " ウィンドウを縦に分割して開く
+    au FileType unite nnoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
+    au FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
+    " ESCキーを2回押すと終了する
+    au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
+    au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
+    "}}}2
+
     " CTRLP {{{2
     if s:env.is_win
         let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
@@ -515,7 +527,7 @@ if g:supports.loaded_neobundle
     "}}}2
 
     " whitespace {{{2
-    let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'thumbnail', 'tweetvim']
+    let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'thumbnail', 'tweetvim', 'vimfiler', 'vimshell']
     " }}}2
 
     " neocomplete{{{2
