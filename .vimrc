@@ -333,12 +333,16 @@ set foldmethod=marker
 set ruler
 set incsearch
 set showcmd
+set title
+set laststatus=2
 set modeline
 set modelines=5
 set smarttab
 set expandtab
 syntax on
-set t_Co=256
+if !s:env.is_win
+    set t_Co=256
+endif
 
 "Filetype indent {{{
 if has("autocmd")
