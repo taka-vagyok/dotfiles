@@ -39,7 +39,7 @@ if has("autocmd")
     autocmd FileType sh         setlocal sw=4 ts=4 et
     autocmd FileType python     setlocal sw=4 ts=4 et
     autocmd FileType cpp        setlocal sw=4 ts=4 et
-    autocmd FileType cs         setlocal sw=4 ts=4 et
+    autocmd FileType cs         setlocal sw=4 ts=4 et number
     autocmd FileType yaml       setlocal sw=2 ts=2 et
     autocmd FileType vim        setlocal sw=4 ts=4 et
     autocmd FileType xml        setlocal sw=2 ts=2 et
@@ -72,8 +72,8 @@ nmap <C-I> :vsc View.NavigateForward<CR>
 nmap <C-]> :vsc Edit.GoToDefinition<CR>
 
 "コメント
-map  TComment :vsc Edit.CommentSelection<CR>
-vmap TComment :vsc Edit.CommentSelection<CR>
+map  :TComment :vsc Edit.CommentSelection<CR>
+vmap :TComment :vsc Edit.CommentSelection<CR>
 
 "今いるタブ以外を消す
 "noremap to :vsc File.CloseAllButThis<CR>
