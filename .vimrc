@@ -41,6 +41,10 @@ function! VimrcSupports()
     let supports = {}
     "[Todo] bunddle support environment
     let supports.git = executable('git')
+    let supports.python = executable('python')
+    let supports.xxbuild = executable('msbuild') || executable('xbuild')
+    let supports.w3m = executable('w3m')
+    let supports.astyle = executable('astyle')
     let supports.neobundle = 0
     let supports.mycolorscheme = 0
     let supports.loaded_neobundle = 0
@@ -221,7 +225,7 @@ function! SetMyNeobundleEnable()
     NeoBundle 'OrangeT/vim-csharp' "syntax
     " MSBuild is in C:\Windows\Microsoft.N
     " ex) C:\Windows\Microsoft.NET\Framework64\v4.0.30319
-    if executable('python') && ( executable('msbuild') || executable('xbuild') )
+    if g:supports.python && g:supports.xxbuild
         NeoBundleLazy 'nosami/Omnisharp', {
                     \   'autoload': {'filetypes': ['cs'], 'commands' : ['OmniSharpStartServer', 'OmniSharpStartServerSolution']},
                     \   'build': {
@@ -239,7 +243,7 @@ function! SetMyNeobundleEnable()
     " if executable('python') && ( executable('msbuild') || executable('xbuild') )
     "     NeoBundle 'vim-scripts/OmniCppComplete'
     " endif
-    if executable('astyle')
+    if g:supports.astyle
         NeoBundle "datsuns/astyle.vim"
     endif
     "}}}
@@ -247,7 +251,6 @@ function! SetMyNeobundleEnable()
     "Visualize {{{2
     NeoBundle 'itchyny/lightline.vim'
     NeoBundle 'Yggdroot/indentLine'
-    "NeoBundle 'nathanaelkane/vim-indent-guides'
     NeoBundle 'vim-scripts/AnsiEsc.vim'
     NeoBundle 'kien/rainbow_parentheses.vim'
     " }}}2
@@ -285,7 +288,7 @@ function! SetMyNeobundleEnable()
     " }}}2
 
     " Web access {{{2
-    if executable("w3m")
+    if g:supports.w3m
         NeoBundle "yuratomo/w3m.vim"
     endif
     "}}}2
@@ -295,6 +298,10 @@ function! SetMyNeobundleEnable()
     NeoBundle 'tpope/vim-fugitive'
     NeoBundle 'vim-scripts/vcscommand.vim'
     "}}}2
+
+    "vimwiki{{{5
+    NeoBundle 'vimwiki/vimwiki'
+    "}}}
 
     " NeoBundle Config: End Proc{{{5
     call neobundle#end()
@@ -497,15 +504,6 @@ if g:supports.loaded_neobundle
     unlet s:bundle
     "}}}2
 
-    "indent-guide {{{2
-    "let g:indent_guides_auto_colors = 1
-    "let g:indent_guides_enable_on_vim_startup = 1
-    "let g:indent_guides_guide_size = &tabstop
-    "let g:indent_guides_guide_size = 1
-    "let g:indent_guides_color_change_percent = 20
-    "let g:indent_guides_start_level = 1
-    "}}}2
-
     "unite-outline {{{2
     let g:unite_winwidth = 40
     let g:unite_split_rule = "rightbelow"
@@ -620,21 +618,23 @@ endif
     "}}}2
 
     "Omni C# {{{
-    augroup omnisharp_commands
-        autocmd!
-        "Set autocomplete function to OmniSharp (if not using YouCompleteMe completion plugin)
-        autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
-        " Synchronous build (blocks Vim)
-        "autocmd FileType cs nnoremap <F5> :wa!<cr>:OmniSharpBuild<cr>
-        " Builds can also run asynchronously with vim-dispatch installed
-        autocmd FileType cs nnoremap <leader>b :wa!<cr>:OmniSharpBuildAsync<cr>
-        " automatic syntax check on events (TextChanged requires Vim 7.4)
-        autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
-        " Automatically add new cs files to the nearest project on save
-        autocmd BufWritePost *.cs call OmniSharp#AddToProject()
-        "show type information automatically when the cursor stops moving
-        autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-    augroup END
+    if g:supports.xxbuild
+        augroup omnisharp_commands
+            autocmd!
+            "Set autocomplete function to OmniSharp (if not using YouCompleteMe completion plugin)
+            autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+            " Synchronous build (blocks Vim)
+            "autocmd FileType cs nnoremap <F5> :wa!<cr>:OmniSharpBuild<cr>
+            " Builds can also run asynchronously with vim-dispatch installed
+            autocmd FileType cs nnoremap <leader>b :wa!<cr>:OmniSharpBuildAsync<cr>
+            " automatic syntax check on events (TextChanged requires Vim 7.4)
+            autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+            " Automatically add new cs files to the nearest project on save
+            autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+            "show type information automatically when the cursor stops moving
+            autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+        augroup END
+    endif
     "}}}
 
     " () をハイライト {{{2
