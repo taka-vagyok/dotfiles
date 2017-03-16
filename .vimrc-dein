@@ -1,0 +1,371 @@
+" ================================
+" Environment/Supports {{{1
+" ================================
+function! VimrcEnvironment()
+    let env = {}
+    let env.is_win = has('win32') || has('win64')
+    let user_dir =  '~/.vim'
+    let env.path = {
+                \ 	'user':          user_dir,
+                \ 	'deindir':     user_dir . '/dein',
+                \ 	'dein':     user_dir . '/dein/dein.vim',
+                \ 	'toml':     expand('~/dotfiles/dein.toml'),
+                \ 	'toml_lazy':     expand('~/dotfiles/lazy.toml'),
+                \ 	'local_vimrcs':  'conf.d',
+                \ 	'tmp':           has("$TMP") ? $TMP.'/.vim_tmp' : '/tmp',
+                \ }
+    let env.github = 'https://github.com/'
+    let env.url = {
+                \ 'dein': env.github . 'Shougo/dein.vim',
+                \ }
+    return env
+endfunction
+
+function! VimrcSupports()
+    let supports = {}
+    let supports.git = executable('git')
+    let supports.xxbuild = executable('msbuild') || executable('xbuild')
+    let supports.neocomplete = has('lua')
+                \ && (v:version > 703 || (v:version == 703 && has('patch885')))
+    let supports.plugin = 0
+    let supports.plugin_loaded = 0
+    return supports
+endfunction
+
+function! InstallIfNot(dlurl,dlpath)
+    " <TODO> catch error download
+    if !isdirectory( expand( a:dlpath ))
+        if g:supports.git
+            try
+                execute("r !git clone " . a:dlurl . " " . expand(a:dlpath))
+            catch /:E117:/
+                echo "E117: Fail to git clone(" . a:dlurl .")"
+                return 0
+            endtry
+            return 1
+        else
+            echo "Error: Cannot fetch " . a:dlurl
+            return 0
+        endif
+    endif
+    return 1
+endfunction
+
+let s:env = VimrcEnvironment()
+if !has('g:supports')
+    let g:supports = VimrcSupports()
+endif
+
+" ================================
+"}}}1
+" ================================
+
+"---------------------------------
+" Install Plugins {{{1
+"---------------------------------
+"once indent off to load
+filetype indent off
+if g:supports.plugin == 0
+    let g:supports.plugin = InstallIfNot( s:env.url.dein , s:env.path.dein )
+endif
+
+" Load Plugins
+execute "set runtimepath+=" . s:env.path.dein
+if dein#load_state(s:env.path.tmp)
+    let g:dein#install_progress_type = 'title'
+    let g:dein#enable_notification = 1
+    call dein#begin(s:env.path.deindir)
+    call dein#load_toml(s:env.path.toml, {'lazy' : 0})
+    " call dein#load_toml(s:env.path.toml_lazy, {'lazy' : 1})
+    call dein#end()
+    call dein#save_state()
+endif
+"Install
+"
+if dein#check_install()
+    call dein#install()
+end
+let g:supports.plugin_loaded = 1
+
+
+"------------------------------
+"  }}}1 Install Plugins
+"------------------------------
+
+"==================================
+" VIM General Settings
+"==================================
+"set list
+"set listchars=tab:â-,trail:-,extends:â,precedes:á,nbsp:%,eol:?
+set wrap
+set textwidth=0
+set colorcolumn=80
+set noswapfile
+set nobackup
+set noundofile
+set tabstop=4
+set shiftwidth=4
+set clipboard+=unnamed  "Enable Windows Clipbord
+set backspace=indent,eol,start
+set nonumber
+set splitbelow "V‚µ‚¢ƒEƒBƒ“ƒhƒE‚ğ‰º‚ÉŠJ‚­
+set splitright "V‚µ‚¢ƒEƒBƒ“ƒhƒE‚ğ‰E‚ÉŠJ‚­
+set foldmethod=marker
+set ruler
+set incsearch
+set showcmd
+set title
+set laststatus=2
+set modeline
+set modelines=5
+set smarttab
+set expandtab
+syntax on
+if !s:env.is_win
+    set t_Co=256
+endif
+
+"Filetype indent {{{
+if has("autocmd")
+    "ƒtƒ@ƒCƒ‹ƒ^ƒCƒv‚ÌŒŸõ‚ğ—LŒø‚É‚·‚é
+    filetype plugin on
+    "‚»‚Ìƒtƒ@ƒCƒ‹ƒ^ƒCƒv‚É‚ ‚í‚¹‚½ƒCƒ“ƒfƒ“ƒg‚ğ—˜—p‚·‚é
+    filetype indent on
+    autocmd FileType ruby       setlocal sw=2 ts=2 et
+    autocmd FileType sh         setlocal sw=4 ts=4 et
+    autocmd FileType postscr    setlocal sw=4 ts=4 et
+    autocmd FileType python     setlocal sw=4 ts=4 et
+    autocmd FileType cpp        setlocal sw=4 ts=4 et
+    autocmd FileType cs         setlocal sw=4 ts=4 et
+    autocmd FileType yaml       setlocal sw=2 ts=2 et
+    autocmd FileType vim        setlocal sw=4 ts=4 et
+    autocmd FileType xml        setlocal sw=2 ts=2 et
+endif
+"}}}
+
+" Move Current Directory when opening file {{{
+" Disable 2014/12/11 because this config have some plugin worked not file.
+"augroup filelcd
+"	autocmd!
+"	autocmd BufEnter * lcd %:p:h
+"augroup END
+" }}}
+
+" Easy  Todo {{{
+" Replace todo list on/off on Visual mode and Normal mode
+" [TODO] plugin
+let g:toggle_complete_tag = "Done"
+nn <buffer> <Leader><Leader> :call ToggleCheckbox()<CR>
+vn <buffer> <Leader><Leader> :call ToggleCheckbox()<CR>
+function! ToggleCheckbox()
+    let l:line = getline('.')
+    if l:line =~ '^\-\s\[\s\]'
+        let l:result = substitute(l:line, '^-\s\[\s]', '- [x]', '') . ' [' . g:toggle_complete_tag . ':' . strftime('%Y/%m/%d %H:%M') . ']'
+        call setline('.', l:result)
+    elseif l:line =~ '^\-\s\[x\]'
+        let l:result = substitute( substitute(l:line, '^-\s\[x\]', '- [ ]', '') , '\s\[' . g:toggle_complete_tag . ':\d\{4}.\+]$' , '','')
+        call setline('.', l:result)
+    end
+endfunction
+" }}}
+
+"IME control for windows {{{
+if !has("gui-running")
+    inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
+    inoremap <silent> <C-[> <ESC>
+    inoremap <silent> <C-j> <C-^>
+endif
+"When enter insert mode, IME recovery.
+"When exit  insert mode, IME off and save.
+if !s:env.is_win
+    set t_SI+=[<r
+    set t_EI+=[<s[<0t
+    set t_te+=[<0[<s
+    "configure ESC wait time
+    set ttimeoutlen=100
+endif
+" }}}
+
+"Add Encording if not kaoriya vim{{{
+if !has('kaoriya')
+    set encoding=utf-8
+    set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
+endif
+"}}}
+
+" Binary Edit {{{
+augroup BinaryXXD
+    autocmd!
+    autocmd BufReadPre  *.bin let &binary =1
+    autocmd BufReadPost * if &binary | silent %!xxd -g 1
+    autocmd BufReadPost * set ft=xxd | endif
+    autocmd BufWritePre * if &binary | execute "%!xxd -r" | endif
+    autocmd BufWritePost * if &binary | silent %!xxd -g 1
+    autocmd BufWritePost * set nomod | endif
+augroup END
+"}}}
+
+" ColorSyntax {{{
+
+if g:supports.plugin_loaded
+    if exists("syntax_on")
+        syntax reset
+    endif
+    execute ":set background=light"
+    execute ":colorscheme term_forrest"
+else
+    set background=dark
+    colorscheme evening
+endif
+"}}}
+
+"------------------------------
+" Configure NeoBundle Plugins {{{
+"------------------------------
+if g:supports.plugin_loaded
+    " QuickRun {{{2
+    " For ez script using :Tmp <ext> or :Temp <ext> (e.g. :Tmp py => we have tmp.py )
+    command! -nargs=1 -complete=filetype Tmp call EditTmpFile(<f-args>)
+    command! -nargs=1 -complete=filetype Temp call EditTmpFile(<f-args>)
+    function! EditTmpFile(ext)
+        if !isdirectory( s:env.path.tmp )
+            call mkdir( s:env.path.tmp )
+        endif
+        execute 'edit' s:env.path.tmp . 'tmp.' . a:ext
+    endfunction
+    "}}}2
+
+    "memolist {{{2
+    let g:memolist_memo_suffix = "md.txt"
+    let g:memolist_prompt_tags = 1
+    let g:memolist_qfixgrep = 1
+    let g:memolist_vimfiler = 1
+    let g:memolist_vimfiler_option ="" "No split
+    au BufNewFile,BufRead *.{md.txt,md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+    "}}}2
+
+    "vimfiler {{{2
+    let g:vimfiler_as_default_explorer = 1
+    "}}}2
+
+    "unite-outline {{{2
+    if !dein#tap("unite")
+        let g:unite_winwidth = 40
+        let g:unite_split_rule = "rightbelow"
+        nnoremap <silent> <Leader>o :<C-u>Unite -vertical -no-quit outline<CR>
+        "}}}2
+
+        "unite{{{2
+        " ƒEƒBƒ“ƒhƒE‚ğ•ªŠ„‚µ‚ÄŠJ‚­
+        au FileType unite nnoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
+        au FileType unite inoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
+        " ƒEƒBƒ“ƒhƒE‚ğc‚É•ªŠ„‚µ‚ÄŠJ‚­
+        au FileType unite nnoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
+        au FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
+        " ESCƒL[‚ğ2‰ñ‰Ÿ‚·‚ÆI—¹‚·‚é
+        au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
+        au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
+        "}}}2
+    end
+
+    " CTRLP {{{2
+    if s:env.is_win
+        let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
+    endif
+    "}}}2
+
+    " whitespace {{{2
+    let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'thumbnail', 'tweetvim', 'vimfiler', 'vimshell']
+    " }}}2
+
+    "watchdog{{{3
+    if !dein#tap("watchdog") && !dein#tap("vimproc")
+        let g:watchdogs_check_CursorHold_enable = 1
+        let g:watchdogs_check_CursorHold_enables = {
+                    \	"python"     : 1,
+                    \	"ruby"     : 1,
+                    \}
+        let g:quickrun_config={
+                    \ '*':{
+                    \ 'hook/time/enable': 1 ,
+                    \ 'split':'' },
+                    \ '_':{
+                    \ 'runner' : 'vimproc',
+                    \ 'runner/vimproc/updatetime' : 60
+                    \ },
+                    \ "watachdog_checker/_" : { 'runner/vimproc/updatetime' : 40 }
+                    \}
+        if exists("g:quickrun_config")
+            call watchdogs#setup(g:quickrun_config)
+        endif
+    end
+    "}}}
+
+    "ref-vim {{{2
+    "webdictƒTƒCƒg‚Ìİ’è
+    if !dein#tap("ref")
+        let g:ref_use_vimproc=1
+        let g:ref_source_webdict_sites = {
+                    \   'jj': {
+                    \     'url': 'http://dictionary.infoseek.ne.jp/word/%s',
+                    \   },
+                    \   'je': {
+                    \     'url': 'http://dictionary.infoseek.ne.jp/jeword/%s',
+                    \   },
+                    \   'ej': {
+                    \     'url': 'http://dictionary.infoseek.ne.jp/ejword/%s',
+                    \   },
+                    \   'wiki': {
+                    \     'url': 'http://ja.wikipedia.org/wiki/%s',
+                    \   },
+                    \ }
+        let g:ref_webdict_cmd="w3c -s -dump %s"
+        let g:ref_webdict_use_cache = 1
+        let g:ref_webdict_encoding = 'utf-8'
+        let g:ref_cache_dir = expand("$TMP")
+        let g:ref_webdict_cache_dir = expand("$TMP/.cache")
+        "ƒfƒtƒHƒ‹ƒgƒTƒCƒg
+        let g:ref_source_webdict_sites.default = 'ej'
+        if !has('$LANG')
+            let $LANG="C.CP932"
+        end
+        "o—Í‚É‘Î‚·‚éƒtƒBƒ‹ƒ^BÅ‰‚Ì”s‚ğíœ
+        function! g:ref_source_webdict_sites.je.filter(output)
+            return join(split(a:output, "\n")[15 :], "\n")
+        endfunction
+        function! g:ref_source_webdict_sites.ej.filter(output)
+            return join(split(a:output, "\n")[15 :], "\n")
+        endfunction
+        function! g:ref_source_webdict_sites.wiki.filter(output)
+            return join(split(a:output, "\n")[17 :], "\n")
+        endfunction
+    end
+    "}}}2
+
+    " () ‚ğƒnƒCƒ‰ƒCƒg {{{2
+
+    if !dein#tap("rainbowparentheses")
+        augroup rainbowparentheses
+            au VimEnter * RainbowParenthesesToggle
+            au Syntax * RainbowParenthesesLoadRound
+            au Syntax * RainbowParenthesesLoadSquare
+            au Syntax * RainbowParenthesesLoadBraces
+        augroup END
+    end
+    " }}}2
+
+    " indentLine
+    let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'unite', 'calendar', 'thumbnail', 'tweetvim']
+endif
+"----------------------------------------
+" }}} End of Configure NeoBundle Plugins
+"----------------------------------------
+
+" Load Local Setting {{{
+execute "set runtimepath+=" . s:env.path.user
+execute "runtime! " . s:env.path.local_vimrcs . "/" . "*vim"
+execute "set runtimepath-=" . s:env.path.user
+" }}}
+
+" vim: set ts=4 sw=4 smarttab expandtab :
+"%EOF

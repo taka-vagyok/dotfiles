@@ -1,0 +1,32 @@
+
+" ime setting
+if has('multi_byte_ime') || has('xim') || has('gui_macvim')
+    " Insert mode: lmap off, IME ON
+    set iminsert=0
+    " Serch mode: lmap off, IME ON
+    set imsearch=0
+    " Normal mode: IME off
+    inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
+endif
+
+colo lucius
+
+"window size
+set lines=50 columns=100
+"transparency
+if has('kaoriya')
+    gui
+    set transparency=245
+endif
+if filereadable("C:/Windows/Fonts/MyricaM.ttc")
+    set guifont=Myrica_M:h11
+elseif filereadable("C:/Windows/Fonts/RictyDiminishedDiscord-Regular.ttf")
+    " h‚Í1.5‚Ì”{”‚É‚·‚é‚ÆŒë·‚ªæ‚è‚É‚­‚¢‚ç‚µ‚¢
+    set guifont=Ricty_Diminished_Discord:h12.5
+endif
+
+"misc
+set antialias
+set showtabline=2
+set guioptions-=T
+set guioptions+=m
