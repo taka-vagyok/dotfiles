@@ -28,6 +28,7 @@ gui = 1
 [[plugins]]
 repo =  'deton/jasentence.vim'
 if = '''!has('kaoriya')'''
+on_i = 1
 
 [[plugins]]
 repo =  'deton/jasegment.vim'
@@ -58,9 +59,6 @@ repo =  'mattn/webapi-vim'
 # Utils
 #
 ########################
-
-[[plugins]]
-repo =  'Shougo/unite.vim'
 
 [[plugins]]
 repo =  'Shougo/neomru.vim'
@@ -106,19 +104,6 @@ on_cmd = ['ToggleGrepRecursiveMode', 'REGrepadd', 'OpenQFixWin', 'RFGrep', 'BGre
 
 [[plugins]]
 repo =  'thinca/vim-quickrun'
-
-[[plugins]]
-repo = 'kien/ctrlp.vim'
-on_cmd = ['CtrlPMixed', 'CtrlPClearAllCaches', 'CtrlPCurWD', 'CtrlP', 'CtrlPRTS', 'CtrlPBuffer', 'CtrlPMRUFiles', 'CtrlPBookmarkDirAdd', 'CtrlPDir', 'CtrlPRoot', 'CtrlPChange', 'ClearCtrlPCache', 'CtrlPLine', 'ClearAllCtrlPCaches', 'CtrlPBufTagAll', 'CtrlPClearCache', 'CtrlPQuickfix', 'CtrlPBufTag', 'CtrlPTag', 'CtrlPCurFile', 'CtrlPLastMode', 'CtrlPUndo', 'CtrlPChangeAll', 'CtrlPBookmarkDir']
-
-[[plugins]]
-repo = 'mbbill/VimExplorer'
-on_cmd = ['VE', 'VEC']
-
-[[plugins]]
-repo = 'Shougo/vimfiler.git'
-on_cmd = [ 'VimFilerTab' , 'VimFiler' , 'VimFilerExplorer' ]
-
 
 # Writting Support
 [[plugins]]
@@ -205,49 +190,12 @@ cmd = ['PrevimOpen']
 repo = 'tyru/open-browser.vim'
 
 
-#############
-#
-# Notes
-#
-#############
-
-[[plugins]]
-repo = 'glidenote/memolist.vim'
-on_cmd = ['MemoList', 'MemoGrep', 'MemoNew']
-
-[[plugins]]
-repo =  'basyura/rmine.vim'
-
-[[plugins]]
-repo =  'vimwiki/vimwiki'
-
-
-#############
-#
-# Styles
-#
-############
-[[plugins]]
-repo =  'plasticboy/vim-markdown'
-on_ft = 'markdown'
-
-[[plugins]]
-repo =  'pangloss/vim-javascript'
-on_ft = 'javascript'
-
-[[plugins]]
-repo =  'OrangeT/vim-csharp'
-on_ft = 'csharp'
-
-
 ##############
 #
 # Checker
 #
 #############
 
-[[plugins]]
-repo =  'osyo-manga/vim-watchdogs'
 
 [[plugins]]
 repo =  'osyo-manga/shabadou.vim'
@@ -255,15 +203,6 @@ repo =  'osyo-manga/shabadou.vim'
 [[plugins]]
 repo =  'jceb/vim-hier'
 
-[[plugins]]
-repo =  'tell-k/vim-autopep8'
-if = '''executable('autopep8')'''
-on_ft = 'python'
-
-[[plugins]]
-repo =  'ngmy/vim-rubocop'
-if = '''executable('rubocop')'''
-on_ft = 'ruby'
 
 
 # [[plugins]]
@@ -289,8 +228,10 @@ on_ft = 'ruby'
 if = '''executable('astyle')'''
 repo =  'datsuns/astyle.vim'
 
+#######################################################
 #
 # Color Scheme
+#
 #######################################################
 [[plugins]]
 repo =  'w0ng/vim-hybrid'
@@ -307,7 +248,6 @@ repo =  'taka-vagyok/term_forrest_cls.vim'
 ########################
 #
 # VCS
-#
 #
 ################################
 [[plugins]]
