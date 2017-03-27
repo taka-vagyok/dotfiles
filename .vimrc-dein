@@ -2,22 +2,26 @@
 " Environment/Supports {{{1
 " ================================
 function! VimrcEnvironment()
-    let env = {}
-    let env.is_win = has('win32') || has('win64')
+    let env = {
+                \   'is_win'    : has('win32') || has('win64')
+                \ }
     let user_dir =  '~/.vim'
+    let plgid = 'Shougo/dein.vim'
+    let repo = 'github.com'
     let env.path = {
-                \ 	'user':          user_dir,
-                \ 	'deindir':     user_dir . '/dein',
-                \ 	'dein':     user_dir . '/dein/dein.vim',
-                \ 	'toml':     expand('~/dotfiles/dein.toml'),
-                \ 	'toml_lazy':     expand('~/dotfiles/deinlazy.toml'),
-                \ 	'local_vimrcs':  'conf.d',
-                \ 	'tmp':           has("$TMP") ? $TMP.'/.vim_tmp' : '/tmp',
+                \ 	'user'  : user_dir,
+                \ 	'tmp'   : has("$TMP") ? $TMP.'/.vim_tmp' : '/tmp',
                 \ }
-    let env.github = 'https://github.com/'
-    let env.url = {
-                \ 'dein': env.github . 'Shougo/dein.vim',
+    let env.plugin = {
+                \   'url'   : 'https://' . repo . '/' . plgid,
+                \   'cache' : env.path.tmp . '/deincache',
+                \   'path'  : user_dir . '/dein',
+                \   'mpath' : user_dir . '/dein/repos/' . repo . '/' . plgid,
+                \   'cnf'   : expand('~/dotfiles/dein.toml'),
+                \   'cnflz' : expand('~/dotfiles/deinlazy.toml')
                 \ }
+    ".cacheの作成場所を制御する
+    let $XDG_CACHE_HOME = env.path.tmp
     return env
 endfunction
 
@@ -63,23 +67,26 @@ endif
 "once indent off to load
 filetype indent off
 if g:supports.plugin == 0
-    let g:supports.plugin = InstallIfNot( s:env.url.dein , s:env.path.dein )
+    let g:supports.plugin = InstallIfNot( s:env.plugin.url , s:env.plugin.mpath )
 endif
 
 " Load Plugins
-execute "set runtimepath+=" . s:env.path.dein
-if dein#load_state(s:env.path.tmp)
-    let g:dein#install_progress_type = 'title'
-    let g:dein#enable_notification = 1
-    call dein#begin(s:env.path.deindir)
-    call dein#load_toml(s:env.path.toml, {'lazy' : 0})
-    call dein#load_toml(s:env.path.toml_lazy, {'lazy' : 1})
+execute "set runtimepath+=" . s:env.plugin.mpath
+if dein#load_state(expand(s:env.plugin.cache))
+    call dein#begin(s:env.plugin.path)
+    call dein#load_toml(s:env.plugin.cnf, {'lazy' : 0})
+    call dein#load_toml(s:env.plugin.cnflz, {'lazy' : 1})
     call dein#end()
     call dein#save_state()
 endif
-"Install
-"
+" vimproc -> 他pluginにすることで高速インストールを試みる
+if dein#check_install(['vimproc'])
+    let g:dein#enable_notification = 0
+    call dein#install(['vimproc'])
+end
 if dein#check_install()
+    let g:dein#install_progress_type = 'title'
+    let g:dein#enable_notification = 1
     call dein#install()
 end
 let g:supports.plugin_loaded = 1
@@ -121,6 +128,8 @@ syntax on
 if !s:env.is_win
     set t_Co=256
 endif
+set printoptions+=formfeed:y
+set printheader=%=Page%N
 
 "Filetype indent {{{
 if has("autocmd")
@@ -132,7 +141,7 @@ if has("autocmd")
     autocmd FileType sh         setlocal sw=4 ts=4 et
     autocmd FileType postscr    setlocal sw=4 ts=4 et
     autocmd FileType python     setlocal sw=4 ts=4 et
-    autocmd FileType cpp        setlocal sw=4 ts=4 et
+    autocmd FileType cpp        setlocal sw=4 ts=4 noet
     autocmd FileType cs         setlocal sw=4 ts=4 et
     autocmd FileType yaml       setlocal sw=2 ts=2 et
     autocmd FileType vim        setlocal sw=4 ts=4 et
@@ -188,7 +197,6 @@ if !has('kaoriya')
     set encoding=utf-8
     set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 endif
-"
 
 " Binary Edit
 augroup BinaryXXD
@@ -200,24 +208,25 @@ augroup BinaryXXD
     autocmd BufWritePost * if &binary | silent %!xxd -g 1
     autocmd BufWritePost * set nomod | endif
 augroup END
-"
 
 " ColorSyntax
-
 if g:supports.plugin_loaded
     if exists("syntax_on")
         syntax reset
     endif
     execute ":set background=light"
-    execute ":colorscheme term_forrest"
+    if s:env.is_win
+        execute ":colorscheme term_forrest"
+    else
+        execute ":colorscheme lucius"
+    endif
 else
     set background=dark
     colorscheme evening
 endif
-"
 
 "------------------------------
-" Configure NeoBundle Plugins {{{
+" Configure Plugins {{{
 "------------------------------
 if g:supports.plugin_loaded
     " QuickRun
@@ -232,9 +241,7 @@ if g:supports.plugin_loaded
     endfunction
 
     "unite-outline {{{2
-    if !dein#tap("unite")
-        nnoremap <silent> <Leader>o :<C-u>Unite -vertical -no-quit outline<CR>
-        "}}}2
+    if dein#tap("unite")
 
         "unite{{{2
         " ウィンドウを分割して開く
@@ -249,83 +256,26 @@ if g:supports.plugin_loaded
         "}}}2
     end
 
-    " CTRLP {{{2
-    if s:env.is_win
-        let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
-    endif
-    "}}}2
-
-    " whitespace {{{2
-    let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'thumbnail', 'tweetvim', 'vimfiler', 'vimshell']
-    " }}}2
-
-    "watchdog{{{3
-    "}}}
-
     "ref-vim {{{2
     "webdictサイトの設定
-    if !dein#tap("ref")
-        let g:ref_use_vimproc=1
-        let g:ref_source_webdict_sites = {
-                    \   'jj': {
-                    \     'url': 'http://dictionary.infoseek.ne.jp/word/%s',
-                    \   },
-                    \   'je': {
-                    \     'url': 'http://dictionary.infoseek.ne.jp/jeword/%s',
-                    \   },
-                    \   'ej': {
-                    \     'url': 'http://dictionary.infoseek.ne.jp/ejword/%s',
-                    \   },
-                    \   'wiki': {
-                    \     'url': 'http://ja.wikipedia.org/wiki/%s',
-                    \   },
-                    \ }
-        let g:ref_webdict_cmd="w3c -s -dump %s"
-        let g:ref_webdict_use_cache = 1
-        let g:ref_webdict_encoding = 'utf-8'
-        let g:ref_cache_dir = expand("$TMP")
-        let g:ref_webdict_cache_dir = expand("$TMP/.cache")
-        "デフォルトサイト
-        let g:ref_source_webdict_sites.default = 'ej'
-        if !has('$LANG')
-            let $LANG="C.CP932"
-        end
-        "出力に対するフィルタ。最初の数行を削除
-        function! g:ref_source_webdict_sites.je.filter(output)
-            return join(split(a:output, "\n")[15 :], "\n")
-        endfunction
-        function! g:ref_source_webdict_sites.ej.filter(output)
-            return join(split(a:output, "\n")[15 :], "\n")
-        endfunction
-        function! g:ref_source_webdict_sites.wiki.filter(output)
-            return join(split(a:output, "\n")[17 :], "\n")
-        endfunction
+    if dein#tap("ref")
+        let g:ref_cache_dir = expand(s:env.path.tmp)
+        let g:ref_webdict_cache_dir = expand(s:env.path.tmp)
     end
     "}}}2
 
-    " () をハイライト {{{2
-
-    if !dein#tap("rainbowparentheses")
-        augroup rainbowparentheses
-            au VimEnter * RainbowParenthesesToggle
-            au Syntax * RainbowParenthesesLoadRound
-            au Syntax * RainbowParenthesesLoadSquare
-            au Syntax * RainbowParenthesesLoadBraces
-        augroup END
-    end
-    " }}}2
-
     " indentLine
+    let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'thumbnail', 'tweetvim', 'vimfiler', 'vimshell']
     let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'unite', 'calendar', 'thumbnail', 'tweetvim']
 endif
 "----------------------------------------
-" }}} End of Configure NeoBundle Plugins
+" }}} End of Configure Plugins
 "----------------------------------------
 
 " Load Local Setting {{{
-execute "set runtimepath+=" . s:env.path.user
-execute "runtime! " . s:env.path.local_vimrcs . "/" . "*vim"
-execute "set runtimepath-=" . s:env.path.user
+" execute "set runtimepath+=" . s:env.path.user
+" execute "runtime! " . s:env.path.local_vimrcs . "/" . "*vim"
+" execute "set runtimepath-=" . s:env.path.user
 " }}}
 
 " vim: set ts=4 sw=4 smarttab expandtab :

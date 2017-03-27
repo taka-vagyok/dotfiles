@@ -12,7 +12,7 @@ hook_source = '''
     let g:memolist_prompt_tags = 1
     let g:memolist_qfixgrep = 1
     let g:memolist_vimfiler = 1
-    let g:memolist_vimfiler_option ="" "No split
+    let g:memolist_vimfiler_option =""
     au BufNewFile,BufRead *.{md.txt,md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 '''
 
@@ -33,7 +33,62 @@ repo =  'Shougo/unite.vim'
 hook_source = '''
     let g:unite_winwidth = 40
     let g:unite_split_rule = "rightbelow"
+    nnoremap <silent> <Leader>o :<C-u>Unite -vertical -no-quit outline<CR>
 '''
+
+[[plugins]]
+repo =  'koron/codic-vim'
+on_cmd = ['Codic']
+
+[[plugins]]
+repo = 'mattn/startmenu-vim'
+on_cmd = ['StartMenu']
+if = '''has('win32') || has('win64')'''
+
+[[plugins]]
+repo = 'tyru/restart.vim'
+on_cmd = ['Restart']
+gui    = 1
+
+[[plugins]]
+repo = 'gregsexton/VimCalc'
+on_cmd = ['Calc']
+
+[[plugins]]
+repo = 'itchyny/calendar.vim'
+on_cmd = ['Calendar']
+
+[[plugins]]
+repo = 'mattn/benchvimrc-vim'
+on_cmd = ['BenchVimrc']
+
+[[plugins]]
+repo = 'thinca/vim-fontzoom'
+on_cmd = ['Fontzoom']
+on_map = ['<Plug>(fontzoom-', '<Plug>(fontzoom+']
+gui    = 1
+
+[[plugins]]
+repo = 'majutsushi/tagbar'
+cmd = ['TagbarGetTypeConfig', 'TagbarSetFoldlevel', 'TagbarOpen', 'TagbarDebug', 'Tagbar', 'TagbarClose', 'TagbarTogglePause', 'TagbarOpenAutoClose', 'TagbarDebugEnd', 'TagbarCurrentTag', 'TagbarShowTag', 'TagbarToggle']
+if = '''executable('ctags')'''
+
+[[plugins]]
+repo = 'yuratomo/w3m.vim'
+if = '''executable('w3m')'''
+
+[[plugins]]
+repo =  'taka-vagyok/prevent-win-closed.vim'
+on_cmd = ['PreventWinClosedEnable']
+
+[[plugins]]
+repo = 'sotte/presenting.vim'
+on_cmd = ['PresentingStart']
+
+[[plugins]]
+repo = 'thinca/vim-showtime'
+on_cmd = ['ShowtimeStart']
+
 #################
 #
 # Filer
@@ -43,15 +98,29 @@ hook_source = '''
 [[plugins]]
 repo = 'Shougo/vimfiler.git'
 on_cmd = [ 'VimFilerTab' , 'VimFiler' , 'VimFilerExplorer' ]
-hook_source = 'g:vimfiler_as_default_explorer = 1'
+hook_source = '''let g:vimfiler_as_default_explorer = 1'''
 
 [[plugins]]
 repo = 'kien/ctrlp.vim'
 on_cmd = ['CtrlPMixed', 'CtrlPClearAllCaches', 'CtrlPCurWD', 'CtrlP', 'CtrlPRTS', 'CtrlPBuffer', 'CtrlPMRUFiles', 'CtrlPBookmarkDirAdd', 'CtrlPDir', 'CtrlPRoot', 'CtrlPChange', 'ClearCtrlPCache', 'CtrlPLine', 'ClearAllCtrlPCaches', 'CtrlPBufTagAll', 'CtrlPClearCache', 'CtrlPQuickfix', 'CtrlPBufTag', 'CtrlPTag', 'CtrlPCurFile', 'CtrlPLastMode', 'CtrlPUndo', 'CtrlPChangeAll', 'CtrlPBookmarkDir']
+hook_source = '''
+if s:env.is_win
+    let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
+endif
+'''
 
 [[plugins]]
 repo = 'mbbill/VimExplorer'
 on_cmd = ['VE', 'VEC']
+
+[[plugins]]
+repo = 'kannokanno/previm'
+cmd = ['PrevimOpen']
+
+[[plugins]]
+repo = 'fuenor/qfixgrep'
+on_cmd = ['ToggleGrepRecursiveMode', 'REGrepadd', 'OpenQFixWin', 'RFGrep', 'BGrepadd', 'ToggleGrepCurrentDirMode', 'VGrepadd', 'RFGrepadd', 'MyGrepWriteResult', 'MyGrepReadResult', 'Vimgrep', 'BGrep', 'RGrepadd', 'Vimgrepadd', 'FGrep', 'MoveToAltQFixWin', 'ToggleMultiEncodingGrep', 'QFixAltWincmd', 'REGrep', 'QFdo', 'QFixCclose', 'RGrep', 'CloseQFixWin', 'EGrep', 'ToggleDamemoji', 'Grepadd', 'EGrepadd', 'MoveToQFixWin', 'Grep', 'ToggleLocationListMode', 'VGrep', 'ToggleQFixWin', 'FList', 'FGrepadd', 'QFixCopen']
+
 
 #############
 #
@@ -74,12 +143,19 @@ on_ft = 'csharp'
 repo = 'cespare/vim-toml'
 on_ft = 'toml'
 
+[[plugins]]
+repo =   'junegunn/vim-easy-align'
+cmd = ['EasyAlign']
+
+[[plugins]]
+repo = 'tomtom/tcomment_vim.git'
+cmd = ['TCommentBlock', 'TComment']
+
 #############
 #
 # Env
 #
 ############
-
 [[plugins]]
 repo =  'osyo-manga/vim-watchdogs'
 depends = [
@@ -87,7 +163,6 @@ depends = [
   'shabadou.vim',
   'vim-quickrun',
 ]
-# í«ãLéQè∆ 2016/05/09
 on_event = ['FocusLost', 'CursorHold']
 hook_add = '''
   let g:quickrun_config = get(g:, 'quickrun_config', {})
@@ -114,6 +189,8 @@ hook_source = '''
 hook_post_source = '''
   call watchdogs#setup(g:quickrun_config)
 '''
+
+
 [[plugins]]
 repo =  'tell-k/vim-autopep8'
 if = '''executable('autopep8')'''

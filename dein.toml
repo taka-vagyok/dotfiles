@@ -35,10 +35,6 @@ repo =  'deton/jasegment.vim'
 if = '''!has('kaoriya')'''
 
 [[plugins]]
-repo =  'taka-vagyok/prevent-win-closed.vim'
-on_cmd = ['PreventWinClosedEnable']
-
-[[plugins]]
 repo =  'itchyny/lightline.vim'
 
 [[plugins]]
@@ -48,7 +44,8 @@ repo =  'Yggdroot/indentLine'
 repo =  'vim-scripts/AnsiEsc.vim'
 
 [[plugins]]
-repo =  'kien/rainbow_parentheses.vim'
+repo = 'luochen1990/rainbow'
+hook_add = 'let g:rainbow_active = 1'
 
 [[plugins]]
 repo =  'mattn/webapi-vim'
@@ -64,43 +61,7 @@ repo =  'mattn/webapi-vim'
 repo =  'Shougo/neomru.vim'
 
 [[plugins]]
-repo =  'koron/codic-vim'
-on_cmd = ['Codic']
-
-[[plugins]]
 repo =  'tyru/open-browser.vim'
-
-[[plugins]]
-repo = 'mattn/startmenu-vim'
-on_cmd = ['StartMenu']
-if = '''has('win32') || has('win64')'''
-
-[[plugins]]
-repo = 'tyru/restart.vim'
-on_cmd = ['Restart']
-gui    = 1
-
-[[plugins]]
-repo = 'gregsexton/VimCalc'
-on_cmd = ['Calc']
-
-[[plugins]]
-repo = 'itchyny/calendar.vim'
-on_cmd = ['Calendar']
-
-[[plugins]]
-repo = 'mattn/benchvimrc-vim'
-on_cmd = ['BenchVimrc']
-
-[[plugins]]
-repo   = 'thinca/vim-fontzoom'
-on_cmd = ['Fontzoom']
-on_map = ['<Plug>(fontzoom-']
-gui    = 1
-
-[[plugins]]
-repo = 'fuenor/qfixgrep'
-on_cmd = ['ToggleGrepRecursiveMode', 'REGrepadd', 'OpenQFixWin', 'RFGrep', 'BGrepadd', 'ToggleGrepCurrentDirMode', 'VGrepadd', 'RFGrepadd', 'MyGrepWriteResult', 'MyGrepReadResult', 'Vimgrep', 'BGrep', 'RGrepadd', 'Vimgrepadd', 'FGrep', 'MoveToAltQFixWin', 'ToggleMultiEncodingGrep', 'QFixAltWincmd', 'REGrep', 'QFdo', 'QFixCclose', 'RGrep', 'CloseQFixWin', 'EGrep', 'ToggleDamemoji', 'Grepadd', 'EGrepadd', 'MoveToQFixWin', 'Grep', 'ToggleLocationListMode', 'VGrep', 'ToggleQFixWin', 'FList', 'FGrepadd', 'QFixCopen']
 
 [[plugins]]
 repo =  'thinca/vim-quickrun'
@@ -118,19 +79,12 @@ repo =  'kana/vim-textobj-user'
 [[plugins]]
 repo =  'tpope/vim-surround'
 
-[[plugins]]
-repo =  'bronson/vim-trailing-whitespace'
-
-[[plugins]]
-repo =   'junegunn/vim-easy-align'
-cmd = ['EasyAlign']
+#[[plugins]]
+#repo =  'bronson/vim-trailing-whitespace'
+#:hook_source = '''let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'thumbnail', 'tweetvim', 'vimfiler', 'vimshell']'''
 
 [[plugins]]
 repo =  'AndrewRadev/linediff.vim'
-
-[[plugins]]
-repo = 'tomtom/tcomment_vim.git'
-cmd = ['TCommentBlock', 'TComment']
 
 # Tagging
 # [TODO] -I is not worked my mingw64. so I need to add include path to make
@@ -153,80 +107,33 @@ cmd = ['TCommentBlock', 'TComment']
 # endif
 # '''
 
-[[plugins]]
-repo = 'majutsushi/tagbar'
-cmd = ['TagbarGetTypeConfig', 'TagbarSetFoldlevel', 'TagbarOpen', 'TagbarDebug', 'Tagbar', 'TagbarClose', 'TagbarTogglePause', 'TagbarOpenAutoClose', 'TagbarDebugEnd', 'TagbarCurrentTag', 'TagbarShowTag', 'TagbarToggle']
-if = '''executable('ctags')'''
 
 ##########################
 # Tools
 ##########################
 [[plugins]]
-repo =  'sotte/presenting.vim'
+repo = 'godlygeek/tabular'
 
 [[plugins]]
-repo =  'thinca/vim-showtime'
-
-[[plugins]]
-repo = 'thinca/vim-ref'
-cmd = ['Ref']
-on_map = ['<Plug>(ref-keyword)']
-
-[[plugins]]
-repo =  'yuratomo/w3m.vim'
-if = '''executable('w3m')'''
-
-[[plugins]]
-repo =  'godlygeek/tabular'
-
-[[plugins]]
-repo =  'Shougo/unite-outline'
-
-[[plugins]]
-repo = 'kannokanno/previm'
-cmd = ['PrevimOpen']
+repo = 'Shougo/unite-outline'
 
 [[plugins]]
 repo = 'tyru/open-browser.vim'
-
 
 ##############
 #
 # Checker
 #
 #############
-
+[[plugins]]
+repo = 'osyo-manga/shabadou.vim'
 
 [[plugins]]
-repo =  'osyo-manga/shabadou.vim'
+repo = 'jceb/vim-hier'
 
 [[plugins]]
-repo =  'jceb/vim-hier'
-
-
-
-# [[plugins]]
-# if g:supports.python && g:supports.xxbuild
-#     repo = 'nosami/Omnisharp', {
-#                 \   'autoload': {'filetypes': ['cs'], 'commands' : ['OmniSharpStartServer', 'OmniSharpStartServerSolution']},
-#                 \   'build': {
-#                 \     'windows': 'MSBuild.exe server/OmniSharp.sln /p:Platform='Any CPU'',
-#                 \     'mac': 'xbuild server/OmniSharp.sln',
-#                 \     'unix': 'xbuild server/OmniSharp.sln',
-#                 \   }
-#                 \ }
-# endif
-#
-# Cpp
-# MSBuild is in C:\Windows\Microsoft.N
-# ex) C:\Windows\Microsoft.NET\Framework64\v4.0.30319
-# if executable('python') && ( executable('msbuild') || executable('xbuild') )
-#     repo =  'vim-scripts/OmniCppComplete'
-# endif
-
-[[plugins]]
-if = '''executable('astyle')'''
 repo =  'datsuns/astyle.vim'
+if = '''executable('astyle')'''
 
 #######################################################
 #
@@ -234,16 +141,16 @@ repo =  'datsuns/astyle.vim'
 #
 #######################################################
 [[plugins]]
-repo =  'w0ng/vim-hybrid'
+repo = 'w0ng/vim-hybrid'
 
 [[plugins]]
-repo =  'jonathanfilip/vim-lucius'
+repo = 'jonathanfilip/vim-lucius'
 
 [[plugins]]
-repo =  'chriskempson/vim-tomorrow-theme'
+repo = 'chriskempson/vim-tomorrow-theme'
 
 [[plugins]]
-repo =  'taka-vagyok/term_forrest_cls.vim'
+repo = 'taka-vagyok/term_forrest_cls.vim'
 
 ########################
 #
@@ -251,7 +158,7 @@ repo =  'taka-vagyok/term_forrest_cls.vim'
 #
 ################################
 [[plugins]]
-repo =  'kmnk/vim-unite-giti'
+repo = 'kmnk/vim-unite-giti'
 if = '''executable('git')'''
 
 [[plugins]]
