@@ -77,11 +77,11 @@ repo =  'scrooloose/syntastic'
 repo =  'kana/vim-textobj-user'
 
 [[plugins]]
-repo =  'tpope/vim-surround'
+repo = 'tpope/vim-surround'
 
-#[[plugins]]
-#repo =  'bronson/vim-trailing-whitespace'
-#:hook_source = '''let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'thumbnail', 'tweetvim', 'vimfiler', 'vimshell']'''
+[[plugins]]
+repo = 'bronson/vim-trailing-whitespace'
+hook_add = '''let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar','help', 'nerdtree', 'thumbnail', 'tweetvim', 'vimfiler', 'vimshell']'''
 
 [[plugins]]
 repo =  'AndrewRadev/linediff.vim'

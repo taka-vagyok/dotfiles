@@ -10,7 +10,8 @@ function! VimrcEnvironment()
     let repo = 'github.com'
     let env.path = {
                 \ 	'user'  : user_dir,
-                \ 	'tmp'   : has("$TMP") ? $TMP.'/.vim_tmp' : '/tmp',
+                \   'local' : user_dir . '/conf.d',
+                \ 	'tmp'   : has("$TMP") ? $TMP.'/.vim_tmp' : has("$XDG_CACHE_HOME") ? $XDG_CACHE_HOME : '/tmp',
                 \ }
     let env.plugin = {
                 \   'url'   : 'https://' . repo . '/' . plgid,
@@ -70,27 +71,28 @@ if g:supports.plugin == 0
     let g:supports.plugin = InstallIfNot( s:env.plugin.url , s:env.plugin.mpath )
 endif
 
-" Load Plugins
-execute "set runtimepath+=" . s:env.plugin.mpath
-if dein#load_state(expand(s:env.plugin.cache))
-    call dein#begin(s:env.plugin.path)
-    call dein#load_toml(s:env.plugin.cnf, {'lazy' : 0})
-    call dein#load_toml(s:env.plugin.cnflz, {'lazy' : 1})
-    call dein#end()
-    call dein#save_state()
+if g:supports.plugin == 1
+    " Load Plugins
+    execute "set runtimepath+=" . s:env.plugin.mpath
+    if dein#load_state(expand(s:env.plugin.cache))
+        call dein#begin(s:env.plugin.path)
+        call dein#load_toml(s:env.plugin.cnf, {'lazy' : 0})
+        call dein#load_toml(s:env.plugin.cnflz, {'lazy' : 1})
+        call dein#end()
+        call dein#save_state()
+    endif
+    " vimproc -> ‘¼plugin‚É‚·‚é‚±‚Æ‚Å‚‘¬ƒCƒ“ƒXƒg[ƒ‹‚ğ‚İ‚é
+    if dein#check_install(['vimproc'])
+        let g:dein#enable_notification = 0
+        call dein#install(['vimproc'])
+    end
+    if dein#check_install()
+        let g:dein#install_progress_type = 'title'
+        let g:dein#enable_notification = 1
+        call dein#install()
+    end
+    let g:supports.plugin_loaded = 1
 endif
-" vimproc -> ‘¼plugin‚É‚·‚é‚±‚Æ‚Å‚‘¬ƒCƒ“ƒXƒg[ƒ‹‚ğ‚İ‚é
-if dein#check_install(['vimproc'])
-    let g:dein#enable_notification = 0
-    call dein#install(['vimproc'])
-end
-if dein#check_install()
-    let g:dein#install_progress_type = 'title'
-    let g:dein#enable_notification = 1
-    call dein#install()
-end
-let g:supports.plugin_loaded = 1
-
 
 "------------------------------
 "  }}}1 Install Plugins
@@ -146,6 +148,8 @@ if has("autocmd")
     autocmd FileType yaml       setlocal sw=2 ts=2 et
     autocmd FileType vim        setlocal sw=4 ts=4 et
     autocmd FileType xml        setlocal sw=2 ts=2 et
+
+    au BufNewFile,BufRead *.as	setf actionscript
 endif
 "}}}
 
@@ -176,21 +180,21 @@ endfunction
 " }}}
 
 "IME control for windows
-if !has("gui-running")
-    inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
-    inoremap <silent> <C-[> <ESC>
-    inoremap <silent> <C-j> <C-^>
-endif
-"When enter insert mode, IME recovery.
-"When exit  insert mode, IME off and save.
-if !s:env.is_win
+if s:env.is_win
+    if !has("gui-running")
+        inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
+        inoremap <silent> <C-[> <ESC>
+        inoremap <silent> <C-j> <C-^>
+    endif
+else
+    "When enter insert mode, IME recovery.
+    "When exit  insert mode, IME off and save.
     set t_SI+=[<r
     set t_EI+=[<s[<0t
     set t_te+=[<0[<s
     "configure ESC wait time
     set ttimeoutlen=100
 endif
-"
 
 "Add Encording if not kaoriya vim
 if !has('kaoriya')
@@ -198,27 +202,17 @@ if !has('kaoriya')
     set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 endif
 
-" Binary Edit
-augroup BinaryXXD
-    autocmd!
-    autocmd BufReadPre  *.bin let &binary =1
-    autocmd BufReadPost * if &binary | silent %!xxd -g 1
-    autocmd BufReadPost * set ft=xxd | endif
-    autocmd BufWritePre * if &binary | execute "%!xxd -r" | endif
-    autocmd BufWritePost * if &binary | silent %!xxd -g 1
-    autocmd BufWritePost * set nomod | endif
-augroup END
-
 " ColorSyntax
 if g:supports.plugin_loaded
     if exists("syntax_on")
         syntax reset
     endif
-    execute ":set background=light"
     if s:env.is_win
-        execute ":colorscheme term_forrest"
+        set background=dark
+        colorscheme term_forrest
     else
-        execute ":colorscheme lucius"
+        set background=light
+        colorscheme lucius
     endif
 else
     set background=dark
@@ -229,43 +223,7 @@ endif
 " Configure Plugins {{{
 "------------------------------
 if g:supports.plugin_loaded
-    " QuickRun
-    " For ez script using :Tmp <ext> or :Temp <ext> (e.g. :Tmp py => we have tmp.py )
-    command! -nargs=1 -complete=filetype Tmp call EditTmpFile(<f-args>)
-    command! -nargs=1 -complete=filetype Temp call EditTmpFile(<f-args>)
-    function! EditTmpFile(ext)
-        if !isdirectory( s:env.path.tmp )
-            call mkdir( s:env.path.tmp )
-        endif
-        execute 'edit' s:env.path.tmp . 'tmp.' . a:ext
-    endfunction
-
-    "unite-outline {{{2
-    if dein#tap("unite")
-
-        "unite{{{2
-        " ƒEƒBƒ“ƒhƒE‚ğ•ªŠ„‚µ‚ÄŠJ‚­
-        au FileType unite nnoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
-        au FileType unite inoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
-        " ƒEƒBƒ“ƒhƒE‚ğc‚É•ªŠ„‚µ‚ÄŠJ‚­
-        au FileType unite nnoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-        au FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-        " ESCƒL[‚ğ2‰ñ‰Ÿ‚·‚ÆI—¹‚·‚é
-        au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
-        au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
-        "}}}2
-    end
-
-    "ref-vim {{{2
-    "webdictƒTƒCƒg‚Ìİ’è
-    if dein#tap("ref")
-        let g:ref_cache_dir = expand(s:env.path.tmp)
-        let g:ref_webdict_cache_dir = expand(s:env.path.tmp)
-    end
-    "}}}2
-
-    " indentLine
-    let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'thumbnail', 'tweetvim', 'vimfiler', 'vimshell']
+    "let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'thumbnail', 'tweetvim', 'vimfiler', 'vimshell']
     let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'unite', 'calendar', 'thumbnail', 'tweetvim']
 endif
 "----------------------------------------
@@ -273,9 +231,9 @@ endif
 "----------------------------------------
 
 " Load Local Setting {{{
-" execute "set runtimepath+=" . s:env.path.user
-" execute "runtime! " . s:env.path.local_vimrcs . "/" . "*vim"
-" execute "set runtimepath-=" . s:env.path.user
+if isdirectory( expand( s:env.path.local ))
+    execute "runtime! " . s:env.path.local . "/" . "*vim"
+endif
 " }}}
 
 " vim: set ts=4 sw=4 smarttab expandtab :

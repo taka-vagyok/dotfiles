@@ -85,10 +85,6 @@ on_cmd = ['PreventWinClosedEnable']
 repo = 'sotte/presenting.vim'
 on_cmd = ['PresentingStart']
 
-[[plugins]]
-repo = 'thinca/vim-showtime'
-on_cmd = ['ShowtimeStart']
-
 #################
 #
 # Filer
@@ -142,6 +138,14 @@ on_ft = 'csharp'
 [[plugins]]
 repo = 'cespare/vim-toml'
 on_ft = 'toml'
+
+[[plugins]]
+repo = 'vim-scripts/actionscript.vim'
+on_ft = 'actionscript'
+
+[[plugins]]
+repo = 'cespare/mxml.vim'
+on_ft = 'mxml'
 
 [[plugins]]
 repo =   'junegunn/vim-easy-align'
