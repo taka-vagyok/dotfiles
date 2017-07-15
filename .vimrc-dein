@@ -1,7 +1,13 @@
 " ================================
 " Environment/Supports {{{1
 " ================================
+function! GetEnvPath(value, defaultv)
+    let env = ("" == a:value) ? a:defaultv : a:value
+    return env
+endfunction
+
 function! VimrcEnvironment()
+    let tmp = GetEnvPath($TMP, GetEnvPath($XDG_CACHE_HOME, '/tmp')) . '/.vim_tmp'
     let env = {
                 \   'is_win'    : has('win32') || has('win64')
                 \ }
@@ -11,7 +17,7 @@ function! VimrcEnvironment()
     let env.path = {
                 \ 	'user'  : user_dir,
                 \   'local' : user_dir . '/conf.d',
-                \ 	'tmp'   : has("$TMP") ? $TMP.'/.vim_tmp' : has("$XDG_CACHE_HOME") ? $XDG_CACHE_HOME : '/tmp',
+                \ 	'tmp'   : tmp
                 \ }
     let env.plugin = {
                 \   'url'   : 'https://' . repo . '/' . plgid,
