@@ -252,11 +252,16 @@ if isdirectory( expand( s:env.path.local ) )
 endif
 " }}}
 
-let $todofile = $mynotedir . "\\@achive\\vim\\wiki\\index.wiki"
-command! Todo edit $todofile
-
 let g:calendar_cache_directory=$notedir . "\\@achive\\vim\\calendar"
 
+let $tododir = $mynotedir . "\\@achive\\vim\\wiki"
+let $todofile = $tododir . "\\index.wiki"
+command! Todo edit $todofile
+
+let wiki_1 = {}
+let wiki_1.path = $tododir
+let wiki_1.auto_toc = 1
+let g:vimwiki_list = [wiki_1]
 
 " vim: set ts=4 sw=4 smarttab expandtab :
 "%EOF

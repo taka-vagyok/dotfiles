@@ -13,12 +13,12 @@ gui = 1
 
 [[plugins]]
 repo =  'deton/jasentence.vim'
-if = ''' !has('kaoriya') '''
+if = '''!has('kaoriya')'''
 on_i = 1
 
 [[plugins]]
 repo =  'deton/jasegment.vim'
-if = ''' !has('kaoriya') '''
+if = '''!has('kaoriya')'''
 
 [[plugins]]
 repo =  'itchyny/lightline.vim'
@@ -38,7 +38,11 @@ repo =  'mattn/webapi-vim'
 # ref[rmine:http://blog.basyura.org/entry/20130106/p1]
 
 [[plugins]]
-repo  = 'vimwiki/vimwiki'
+repo = 'vimwiki/vimwiki'
+hook_add =  '''
+    au BufNewFile,BufRead *.{wiki} set filetype=vimwiki
+	let g:vimwiki_nested_syntaxes = {'python': 'python', 'c++': 'cpp', 'bash': 'sh'}
+'''
 on_ft = 'vimwiki'
 
 #########################
