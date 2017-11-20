@@ -1,3 +1,6 @@
+if &compatible
+  set nocompatible 
+endif
 " ================================
 " Environment/Supports {{{1
 " ================================
@@ -29,6 +32,7 @@ function! VimrcEnvironment()
                 \ }
     ".cacheÇÃçÏê¨èÍèäÇêßå‰Ç∑ÇÈ
     let $XDG_CACHE_HOME = env.path.tmp
+	let $mynotedir = expand('~/note')
     return env
 endfunction
 
@@ -132,7 +136,7 @@ set modeline
 set modelines=5
 set smarttab
 set expandtab
-syntax on
+
 if !s:env.is_win
     set t_Co=256
 endif
@@ -158,6 +162,7 @@ if has("autocmd")
     au BufNewFile,BufRead *.as	setf actionscript
 endif
 "}}}
+syntax on
 
 " Move Current Directory when opening file {{{
 " Disable 2014/12/11 because this config have some plugin worked not file.
@@ -231,16 +236,27 @@ endif
 if g:supports.plugin_loaded
     "let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'thumbnail', 'tweetvim', 'vimfiler', 'vimshell']
     let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'unite', 'calendar', 'thumbnail', 'tweetvim']
+
+    let year = strftime("%Y", localtime())
+
 endif
 "----------------------------------------
 " }}} End of Configure Plugins
 "----------------------------------------
 
 " Load Local Setting {{{
-if isdirectory( expand( s:env.path.local ))
+if isdirectory( expand( s:env.path.local ) )
+    execute "set runtimepath+=" . s:env.path.user
     execute "runtime! " . s:env.path.local . "/" . "*vim"
+    execute "set runtimepath-=" . s:env.path.user
 endif
 " }}}
+
+let $todofile = $mynotedir . "\\@achive\\vim\\wiki\\index.wiki"
+command! Todo edit $todofile
+
+let g:calendar_cache_directory=$notedir . "\\@achive\\vim\\calendar"
+
 
 " vim: set ts=4 sw=4 smarttab expandtab :
 "%EOF

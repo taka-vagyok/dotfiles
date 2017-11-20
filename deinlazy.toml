@@ -9,11 +9,10 @@ repo = 'glidenote/memolist.vim'
 on_cmd = ['MemoList', 'MemoGrep', 'MemoNew']
 hook_source = '''
     let g:memolist_memo_suffix = "md.txt"
-    let g:memolist_prompt_tags = 1
+    let g:memolist_prompt_tags = 0
     let g:memolist_qfixgrep = 1
     let g:memolist_vimfiler = 1
     let g:memolist_vimfiler_option =""
-    au BufNewFile,BufRead *.{md.txt,md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 '''
 
 [[plugins]]
@@ -57,6 +56,9 @@ on_cmd = ['Calc']
 [[plugins]]
 repo = 'itchyny/calendar.vim'
 on_cmd = ['Calendar']
+hook_add = '''
+command! Car :Calendar -view=year -split=horizontal -position=below -height=12
+'''
 
 [[plugins]]
 repo = 'mattn/benchvimrc-vim'
@@ -70,7 +72,7 @@ gui    = 1
 
 [[plugins]]
 repo = 'majutsushi/tagbar'
-cmd = ['TagbarGetTypeConfig', 'TagbarSetFoldlevel', 'TagbarOpen', 'TagbarDebug', 'Tagbar', 'TagbarClose', 'TagbarTogglePause', 'TagbarOpenAutoClose', 'TagbarDebugEnd', 'TagbarCurrentTag', 'TagbarShowTag', 'TagbarToggle']
+on_cmd = ['TagbarGetTypeConfig', 'TagbarSetFoldlevel', 'TagbarOpen', 'TagbarDebug', 'Tagbar', 'TagbarClose', 'TagbarTogglePause', 'TagbarOpenAutoClose', 'TagbarDebugEnd', 'TagbarCurrentTag', 'TagbarShowTag', 'TagbarToggle']
 if = '''executable('ctags')'''
 
 [[plugins]]
@@ -111,7 +113,7 @@ on_cmd = ['VE', 'VEC']
 
 [[plugins]]
 repo = 'kannokanno/previm'
-cmd = ['PrevimOpen']
+on_cmd = ['PrevimOpen']
 
 [[plugins]]
 repo = 'fuenor/qfixgrep'
@@ -126,6 +128,7 @@ on_cmd = ['ToggleGrepRecursiveMode', 'REGrepadd', 'OpenQFixWin', 'RFGrep', 'BGre
 [[plugins]]
 repo =  'plasticboy/vim-markdown'
 on_ft = 'markdown'
+hook_add = 'au BufNewFile,BufRead *.{md.txt,md,mdwn,mkd,mkdn,mark*} set filetype=markdown'
 
 [[plugins]]
 repo =  'pangloss/vim-javascript'
@@ -149,11 +152,21 @@ on_ft = 'mxml'
 
 [[plugins]]
 repo =   'junegunn/vim-easy-align'
-cmd = ['EasyAlign']
+on_cmd = ['EasyAlign']
 
 [[plugins]]
 repo = 'tomtom/tcomment_vim.git'
-cmd = ['TCommentBlock', 'TComment']
+on_cmd = ['TCommentBlock', 'TComment']
+
+[[plugins]]
+repo =  'tell-k/vim-autopep8'
+if = '''executable('autopep8')'''
+on_ft = 'python'
+
+[[plugins]]
+repo =  'ngmy/vim-rubocop'
+if = '''executable('rubocop')'''
+on_ft = 'ruby'
 
 #############
 #
@@ -194,13 +207,18 @@ hook_post_source = '''
   call watchdogs#setup(g:quickrun_config)
 '''
 
-
 [[plugins]]
-repo =  'tell-k/vim-autopep8'
-if = '''executable('autopep8')'''
-on_ft = 'python'
+repo = 'Shougo/vimproc'
+hook_post_update = '''
+  if dein#util#_is_windows()
+    let cmd = 'echo o | tools\\update-dll-mingw'
+  elseif dein#util#_is_cygwin()
+    let cmd = 'make -f make_cygwin.mak'
+  elseif executable('gmake')
+    let cmd = 'gmake'
+  else
+    let cmd = 'make'
+  endif
+  let g:dein#plugin.build = cmd
+'''
 
-[[plugins]]
-repo =  'ngmy/vim-rubocop'
-if = '''executable('rubocop')'''
-on_ft = 'ruby'

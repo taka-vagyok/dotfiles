@@ -3,20 +3,6 @@
 #  Env
 #
 ######################
-[[plugins]]
-repo = 'Shougo/vimproc'
-hook_post_update = '''
-  if dein#util#_is_windows()
-    let cmd = 'echo o | tools\\update-dll-mingw'
-  elseif dein#util#_is_cygwin()
-    let cmd = 'make -f make_cygwin.mak'
-  elseif executable('gmake')
-    let cmd = 'gmake'
-  else
-    let cmd = 'make'
-  endif
-  let g:dein#plugin.build = cmd
-'''
 
 [[plugins]]
 repo = 'Shougo/vimshell'
@@ -27,12 +13,12 @@ gui = 1
 
 [[plugins]]
 repo =  'deton/jasentence.vim'
-if = '''!has('kaoriya')'''
+if = ''' !has('kaoriya') '''
 on_i = 1
 
 [[plugins]]
 repo =  'deton/jasegment.vim'
-if = '''!has('kaoriya')'''
+if = ''' !has('kaoriya') '''
 
 [[plugins]]
 repo =  'itchyny/lightline.vim'
@@ -50,6 +36,10 @@ hook_add = 'let g:rainbow_active = 1'
 [[plugins]]
 repo =  'mattn/webapi-vim'
 # ref[rmine:http://blog.basyura.org/entry/20130106/p1]
+
+[[plugins]]
+repo  = 'vimwiki/vimwiki'
+on_ft = 'vimwiki'
 
 #########################
 #
@@ -81,10 +71,12 @@ repo = 'tpope/vim-surround'
 
 [[plugins]]
 repo = 'bronson/vim-trailing-whitespace'
-hook_add = '''let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar','help', 'nerdtree', 'thumbnail', 'tweetvim', 'vimfiler', 'vimshell']'''
+hook_add = '''
+    let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'vimfiler', 'vimshell']
+'''
 
-[[plugins]]
-repo =  'AndrewRadev/linediff.vim'
+# [[plugins]]
+# repo =  'AndrewRadev/linediff.vim'
 
 # Tagging
 # [TODO] -I is not worked my mingw64. so I need to add include path to make
@@ -106,7 +98,6 @@ repo =  'AndrewRadev/linediff.vim'
 #     endif
 # endif
 # '''
-
 
 ##########################
 # Tools
