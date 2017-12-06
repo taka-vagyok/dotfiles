@@ -19,7 +19,7 @@ function! VimrcEnvironment()
     let repo = 'github.com'
     let env.path = {
                 \ 	'user'  : user_dir,
-                \   'local' : user_dir . '/conf.d',
+                \   'local' : 'conf.d',
                 \ 	'tmp'   : tmp
                 \ }
     let env.plugin = {
@@ -230,6 +230,18 @@ else
     colorscheme evening
 endif
 
+"----------------------------------------
+" }}} End of Configure Plugins
+"----------------------------------------
+
+" Load Local Setting {{{
+if isdirectory( expand( s:env.path.user . "/" . s:env.path.local ) )
+    execute "set runtimepath+=" . s:env.path.user
+    execute "runtime! " . s:env.path.local . "/" . "*vim"
+    execute "set runtimepath-=" . s:env.path.user
+endif
+" }}}
+
 "------------------------------
 " Configure Plugins {{{
 "------------------------------
@@ -238,21 +250,9 @@ if g:supports.plugin_loaded
     let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'unite', 'calendar', 'thumbnail', 'tweetvim']
 
     let year = strftime("%Y", localtime())
-
+    let g:calendar_cache_directory = $mynotedir . "\\@achive\\vim\\calendar"
+    let g:memolist_path = $mynotedir . "\\@achive\\memo\\year"
 endif
-"----------------------------------------
-" }}} End of Configure Plugins
-"----------------------------------------
-
-" Load Local Setting {{{
-if isdirectory( expand( s:env.path.local ) )
-    execute "set runtimepath+=" . s:env.path.user
-    execute "runtime! " . s:env.path.local . "/" . "*vim"
-    execute "set runtimepath-=" . s:env.path.user
-endif
-" }}}
-
-let g:calendar_cache_directory=$notedir . "\\@achive\\vim\\calendar"
 
 let $tododir = $mynotedir . "\\@achive\\vim\\wiki"
 let $todofile = $tododir . "\\index.wiki"
