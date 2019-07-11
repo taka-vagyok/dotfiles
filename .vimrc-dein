@@ -213,6 +213,14 @@ if !has('kaoriya')
     set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 endif
 
+"Add CdCurrent command like kaoriya-gvim and autochdir
+if !has('kaoriya')
+    command! CdCurrent :cd %:h
+    if exists("+autochdir")
+        set autochdir
+    endif
+endif
+
 " ColorSyntax
 if g:supports.plugin_loaded
     if exists("syntax_on")
