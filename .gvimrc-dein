@@ -19,10 +19,18 @@ if has('kaoriya')
     set transparency=245
 endif
 if filereadable("C:/Windows/Fonts/MyricaM.ttc")
-    set guifont=Myrica_M:h11
+    if has("nvim")
+        Guifont! Myrica\ M:h11
+    else
+        set guifont=Myrica_M:h11
+    endif
 elseif filereadable("C:/Windows/Fonts/RictyDiminishedDiscord-Regular.ttf")
-    " h‚Í1.5‚Ì”{”‚É‚·‚é‚ÆŒë·‚ªæ‚è‚É‚­‚¢‚ç‚µ‚¢
-    set guifont=Ricty_Diminished_Discord:h12.5
+    if has("nvim")
+        "Guifont!
+    else
+        " hã¯1.5ã®å€æ•°ã«ã™ã‚‹ã¨èª¤å·®ãŒä¹—ã‚Šã«ãã„ã‚‰ã—ã„
+        set guifont=ricty_diminished_discord:h12.5
+    endif
 endif
 
 "misc

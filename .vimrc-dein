@@ -1,18 +1,19 @@
 if &compatible
-  set nocompatible 
+  set nocompatible
 endif
 " ================================
 " Environment/Supports {{{1
 " ================================
 function! GetEnvPath(value, defaultv)
-    let env = ("" == a:value) ? a:defaultv : a:value
+    let env = ('' == a:value) ? a:defaultv : a:value
     return env
 endfunction
 
 function! VimrcEnvironment()
     let tmp = GetEnvPath($TMP, GetEnvPath($XDG_CACHE_HOME, '/tmp')) . '/.vim_tmp'
     let env = {
-                \   'is_win'    : has('win32') || has('win64')
+                \   'is_win'    : has('win32') || has('win64'),
+                \   'gui_loaded' : has('gui-running') || exists('g:GuiLoaded'),
                 \ }
     let user_dir =  '~/.vim'
     let plgid = 'Shougo/dein.vim'
@@ -30,7 +31,7 @@ function! VimrcEnvironment()
                 \   'cnf'   : expand('~/dotfiles/dein.toml'),
                 \   'cnflz' : expand('~/dotfiles/deinlazy.toml')
                 \ }
-    ".cache‚Ìì¬êŠ‚ğ§Œä‚·‚é
+    ".cacheã®ä½œæˆå ´æ‰€ã‚’åˆ¶å¾¡ã™ã‚‹
     let $XDG_CACHE_HOME = env.path.tmp
 	let $mynotedir = expand('~/note')
     return env
@@ -49,14 +50,14 @@ function! InstallIfNot(dlurl,dlpath)
     if !isdirectory( expand( a:dlpath ))
         if g:supports.git
             try
-                execute("r !git clone " . a:dlurl . " " . expand(a:dlpath))
+                execute('r !git clone ' . a:dlurl . ' ' . expand(a:dlpath))
             catch /:E117:/
-                echo "E117: Fail to git clone(" . a:dlurl .")"
+                echo 'E117: Fail to git clone(' . a:dlurl .')'
                 return 0
             endtry
             return 1
         else
-            echo "Error: Cannot fetch " . a:dlurl
+            echo 'Error: Cannot fetch ' . a:dlurl
             return 0
         endif
     endif
@@ -83,7 +84,7 @@ endif
 
 if g:supports.plugin == 1
     " Load Plugins
-    execute "set runtimepath+=" . s:env.plugin.mpath
+    execute 'set runtimepath+=' . s:env.plugin.mpath
     if dein#load_state(expand(s:env.plugin.cache))
         call dein#begin(s:env.plugin.path)
         call dein#load_toml(s:env.plugin.cnf, {'lazy' : 0})
@@ -91,11 +92,11 @@ if g:supports.plugin == 1
         call dein#end()
         call dein#save_state()
     endif
-    " vimproc -> ‘¼plugin‚É‚·‚é‚±‚Æ‚Å‚‘¬ƒCƒ“ƒXƒg[ƒ‹‚ğ‚İ‚é
-    if dein#check_install(['vimproc'])
-        let g:dein#enable_notification = 0
-        call dein#install(['vimproc'])
-    end
+    " vimproc -> ä»–pluginã«ã™ã‚‹ã“ã¨ã§é«˜é€Ÿã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã‚’è©¦ã¿ã‚‹
+    "if dein#check_install(['vimproc'])
+    "    let g:dein#enable_notification = 0
+    "    call dein#install(['vimproc'])
+    "end
     if dein#check_install()
         let g:dein#install_progress_type = 'title'
         let g:dein#enable_notification = 1
@@ -112,7 +113,7 @@ endif
 " VIM General Settings
 "==================================
 "set list
-"set listchars=tab:â-,trail:-,extends:â,precedes:á,nbsp:%,eol:?
+"set listchars=tab:â‰«-,trail:-,extends:â‰«,precedes:â‰ª,nbsp:%,eol:?
 set wrap
 set textwidth=0
 set colorcolumn=80
@@ -123,9 +124,9 @@ set tabstop=4
 set shiftwidth=4
 set clipboard+=unnamed  "Enable Windows Clipbord
 set backspace=indent,eol,start
-set nonumber
-set splitbelow "V‚µ‚¢ƒEƒBƒ“ƒhƒE‚ğ‰º‚ÉŠJ‚­
-set splitright "V‚µ‚¢ƒEƒBƒ“ƒhƒE‚ğ‰E‚ÉŠJ‚­
+set number
+set splitbelow "æ–°ã—ã„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ä¸‹ã«é–‹ã
+set splitright "æ–°ã—ã„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å³ã«é–‹ã
 set foldmethod=marker
 set ruler
 set incsearch
@@ -144,10 +145,10 @@ set printoptions+=formfeed:y
 set printheader=%=Page%N
 
 "Filetype indent {{{
-if has("autocmd")
-    "ƒtƒ@ƒCƒ‹ƒ^ƒCƒv‚ÌŒŸõ‚ğ—LŒø‚É‚·‚é
+if has('autocmd')
+    "ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—ã®æ¤œç´¢ã‚’æœ‰åŠ¹ã«ã™ã‚‹
     filetype plugin on
-    "‚»‚Ìƒtƒ@ƒCƒ‹ƒ^ƒCƒv‚É‚ ‚í‚¹‚½ƒCƒ“ƒfƒ“ƒg‚ğ—˜—p‚·‚é
+    "ãã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—ã«ã‚ã‚ã›ãŸã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’åˆ©ç”¨ã™ã‚‹
     filetype indent on
     autocmd FileType ruby       setlocal sw=2 ts=2 et
     autocmd FileType sh         setlocal sw=4 ts=4 et
@@ -175,7 +176,7 @@ syntax on
 " Easy  Todo {{{
 " Replace todo list on/off on Visual mode and Normal mode
 " [TODO] plugin
-let g:toggle_complete_tag = "Done"
+let g:toggle_complete_tag = 'Done'
 nn <buffer> <Leader><Leader> :call ToggleCheckbox()<CR>
 vn <buffer> <Leader><Leader> :call ToggleCheckbox()<CR>
 function! ToggleCheckbox()
@@ -192,7 +193,7 @@ endfunction
 
 "IME control for windows
 if s:env.is_win
-    if !has("gui-running")
+    if !has('gui-running')
         inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
         inoremap <silent> <C-[> <ESC>
         inoremap <silent> <C-j> <C-^>
@@ -216,14 +217,14 @@ endif
 "Add CdCurrent command like kaoriya-gvim and autochdir
 if !has('kaoriya')
     command! CdCurrent :cd %:h
-    if exists("+autochdir")
+    if exists('+autochdir')
         set autochdir
     endif
 endif
 
 " ColorSyntax
 if g:supports.plugin_loaded
-    if exists("syntax_on")
+    if exists('syntax_on')
         syntax reset
     endif
     if s:env.is_win
@@ -243,10 +244,10 @@ endif
 "----------------------------------------
 
 " Load Local Setting {{{
-if isdirectory( expand( s:env.path.user . "/" . s:env.path.local ) )
-    execute "set runtimepath+=" . s:env.path.user
-    execute "runtime! " . s:env.path.local . "/" . "*vim"
-    execute "set runtimepath-=" . s:env.path.user
+if isdirectory( expand( s:env.path.user . '/' . s:env.path.local ) )
+    execute 'set runtimepath+=' . s:env.path.user
+    execute 'runtime! ' . s:env.path.local . '/' . '*vim'
+    execute 'set runtimepath-=' . s:env.path.user
 endif
 " }}}
 
@@ -257,13 +258,13 @@ if g:supports.plugin_loaded
     "let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'thumbnail', 'tweetvim', 'vimfiler', 'vimshell']
     let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'unite', 'calendar', 'thumbnail', 'tweetvim']
 
-    let year = strftime("%Y", localtime())
-    let g:calendar_cache_directory = $mynotedir . "\\@achive\\vim\\calendar"
-    let g:memolist_path = $mynotedir . "\\@achive\\memo\\year"
+    let year = strftime('%Y', localtime())
+    let g:calendar_cache_directory = $mynotedir . '\\@achive\\vim\\calendar'
+    let g:memolist_path = $mynotedir . '\\@achive\\memo\\year'
 endif
 
-let $tododir = $mynotedir . "\\@achive\\vim\\wiki"
-let $todofile = $tododir . "\\index.wiki"
+let $tododir = $mynotedir . '\\@achive\\vim\\wiki'
+let $todofile = $tododir . '\\index.wiki'
 command! Todo edit $todofile
 
 let wiki_1 = {}
