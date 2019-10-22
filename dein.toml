@@ -82,6 +82,8 @@ hook_add = '''
     nmap <silent> <C-j> <Plug>(ale_next_wrap)
 '''
 
+[[plugins]]
+repo = 'pepo-le/win-ime-con.nvim'
 
 [[plugins]]
 repo =  'kana/vim-textobj-user'
