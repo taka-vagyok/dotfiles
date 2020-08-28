@@ -22,6 +22,37 @@ if = '''!has('kaoriya')'''
 
 [[plugins]]
 repo =  'itchyny/lightline.vim'
+hook_add = '''
+    let g:lightline = {
+    \ 'colorscheme': 'wombat',
+    \ 'active': {
+    \   'left': [ [ 'mode', 'paste' ],
+    \             [ 'readonly', 'filename', 'modified' ],
+    \             [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ] ],
+    \ },
+    \ }
+'''
+
+[[plugins]]
+repo = 'maximbaz/lightline-ale'
+depends = ['lightline.vim', 'ale']
+hook_add = '''
+    let g:lightline.component_expand = {
+      \  'linter_checking': 'lightline#ale#checking',
+      \  'linter_warnings': 'lightline#ale#warnings',
+      \  'linter_errors': 'lightline#ale#errors',
+      \  'linter_ok': 'lightline#ale#ok',
+      \ }
+    let g:lightline.component_type = {
+      \     'linter_checking': 'left',
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \     'linter_ok': 'left',
+      \ }
+    let g:lightline.active = {
+      \ 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'  ]]
+      \ }
+'''
 
 [[plugins]]
 repo =  'Yggdroot/indentLine'
@@ -70,7 +101,7 @@ repo =  'terryma/vim-multiple-cursors'
 [[plugins]]
 repo = 'w0rp/ale'
 hook_add = '''
-    let g:ale_lint_on_text_changed = 0
+    let g:ale_lint_on_text_changed = 1
     let g:ale_sign_error = '✖'
     let g:ale_sign_warning = '⚠ '
     let g:airline#extensions#ale#open_lnum_symbol = '('
@@ -80,6 +111,16 @@ hook_add = '''
     highlight link ALEWarningSign StorageClass
     nmap <silent> <C-k> <Plug>(ale_previous_wrap)
     nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+    let g:ale_linters = {
+    \   'javascript': ['eslint', 'eslint-plugin-vue'],
+    \   'python': ['pyflakes', 'pep8'],
+    \   'ruby': ['rubocop'],
+    \   'tex': ['textlint'],
+    \   'markdown': ['textlint'],
+    \   'css': ['stylelint'],
+    \}
+    let g:ale_completion_enabled = 1
 '''
 
 [[plugins]]
