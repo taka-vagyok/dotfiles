@@ -103,6 +103,8 @@ if g:supports.plugin == 1
         call dein#install()
     end
     let g:supports.plugin_loaded = 1
+    " Update Command
+    command! UpdateDein :call dein#update()
 endif
 
 "------------------------------
@@ -211,15 +213,16 @@ endif
 "Add Encording if not kaoriya vim
 if !has('kaoriya')
     set encoding=utf-8
-    set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
+    set fileencodings=ucs-bom,eucjp-ms,sjis,cp932,utf-8
+    "set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 endif
 
 "Add CdCurrent command like kaoriya-gvim and autochdir
 if !has('kaoriya')
     command! CdCurrent :cd %:h
-    if exists('+autochdir')
-        set autochdir
-    endif
+    " if exists('+autochdir')
+    "     set autochdir
+    " endif
 endif
 
 " ColorSyntax
@@ -238,6 +241,7 @@ else
     set background=dark
     colorscheme evening
 endif
+
 
 "----------------------------------------
 " }}} End of Configure Plugins
