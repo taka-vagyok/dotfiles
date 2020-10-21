@@ -205,6 +205,34 @@ on_ft = 'ruby'
 repo = 'PProvost/vim-ps1'
 on_ft = 'ps1'
 
+[[plugins]]
+repo = 'kana/vim-operator-user'
+on_ft = ['c', 'cpp']
+if = '''executable('clang-format')'''
+
+[[plugins]]
+#repo = 'justmao945/vim-clang'
+repo = 'rhysd/vim-clang-format'
+depends = ['vim-operator-user']
+if = '''executable('clang-format')'''
+on_ft = ['c', 'cpp']
+hook_add = '''
+let g:clang_format#auto_format = 1
+let g:clang_format#style_options= {
+    \  "AlignConsecutiveAssignments": "true",
+    \  "Cpp11BracedListStyle": "true",
+    \  "DerivePointerAlignment": "false",
+    \  "IndentCaseLabels": "true",
+    \  "IndentWidth":     4,
+    \  "KeepEmptyLinesAtTheStartOfBlocks": "true",
+    \  "PointerAlignment": "Right",
+    \  "SpacesBeforeTrailingComments": 1,
+    \  "Standard":        "Cpp11",
+    \  "TabWidth":        4,
+    \  "UseTab":          "ForIndentation"
+    \  }
+'''
+
 #############
 #
 # Env
