@@ -273,12 +273,3 @@ hook_post_source = '''
   call watchdogs#setup(g:quickrun_config)
 '''
 
-[[plugins]]
-repo = 'Shougo/vimproc'
-hook_ad = '''
-    let g:vimproc#download_windows_dll = 1
-'''
-hook_source = '''
-    let g:vimproc#download_windows_dll = 1
-'''
-

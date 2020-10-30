@@ -28,8 +28,20 @@ hook_add = '''
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ],
     \             [ 'readonly', 'filename', 'modified' ],
-    \             [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ] ],
-    \ },
+    \ ],
+    \   'right': [
+    \               ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'  ],
+    \               [ 'lineinfo' ],
+    \               ['percent'],
+    \               ['fileformat',  'fileencoding', 'filetype'],
+    \            ]
+    \   },
+    \ }
+    let g:lightline.component_type = {
+    \     'linter_checking': 'left',
+    \     'linter_warnings': 'warning',
+    \     'linter_errors': 'error',
+    \     'linter_ok': 'left',
     \ }
 '''
 
@@ -42,15 +54,6 @@ hook_add = '''
       \  'linter_warnings': 'lightline#ale#warnings',
       \  'linter_errors': 'lightline#ale#errors',
       \  'linter_ok': 'lightline#ale#ok',
-      \ }
-    let g:lightline.component_type = {
-      \     'linter_checking': 'left',
-      \     'linter_warnings': 'warning',
-      \     'linter_errors': 'error',
-      \     'linter_ok': 'left',
-      \ }
-    let g:lightline.active = {
-      \ 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'  ]]
       \ }
 '''
 
@@ -138,29 +141,6 @@ hook_add = '''
     let g:extra_whitespace_ignored_filetypes = ['unite', 'calendar', 'help', 'nerdtree', 'vimfiler', 'vimshell']
 '''
 
-# [[plugins]]
-# repo =  'AndrewRadev/linediff.vim'
-
-# Tagging
-# [TODO] -I is not worked my mingw64. so I need to add include path to make
-# file and build by my self.
-#
-# [[plugins]]
-# hook_post_update = ''' has('win32') || has('win64')
-#     if executable('mingw32-make')
-#         let g:mingw_include = 'C:/bin/mingw64/include/'
-#         let $PATH = $PATH .';# . g:mingw_include
-#         repo =  'vim-jp/ctags', { 'build' : { 'windows' : 'mingw32-make.exe -I' . g:mingw_include . ' -f mk_mingw.mak' , } }
-#     else
-#         repo =  'vim-jp/ctags'
-#     endif
-#     if !exists('g:load_my_tag_path')
-#         let g:load_my_tag_path = 1
-#         # Add ctags to my repository
-#         let $PATH = $PATH . ';# . $HOME . '/.vim/bundle/ctags'
-#     endif
-# endif
-# '''
 
 ##########################
 # Tools
@@ -170,9 +150,6 @@ repo = 'godlygeek/tabular'
 
 [[plugins]]
 repo = 'Shougo/unite-outline'
-
-[[plugins]]
-repo = 'tyru/open-browser.vim'
 
 ##############
 #
@@ -222,3 +199,15 @@ if = '''executable('git')'''
 [[plugins]]
 repo =  'vim-scripts/vcscommand.vim'
 
+########################
+# Control
+########################
+
+[[plugins]]
+repo = 'Shougo/vimproc'
+hook_ad = '''
+    let g:vimproc#download_windows_dll = 1
+'''
+hook_source = '''
+    let g:vimproc#download_windows_dll = 1
+'''

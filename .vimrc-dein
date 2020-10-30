@@ -101,6 +101,7 @@ if g:supports.plugin == 1
         let g:dein#install_progress_type = 'title'
         let g:dein#enable_notification = 1
         call dein#install()
+        call dein#update()
     end
     let g:supports.plugin_loaded = 1
     " Update Command
@@ -130,6 +131,7 @@ set number
 set splitbelow "新しいウィンドウを下に開く
 set splitright "新しいウィンドウを右に開く
 set foldmethod=marker
+set foldlevel=2 "開いたときにLevel2まではOpenしておく
 set ruler
 set incsearch
 set showcmd
